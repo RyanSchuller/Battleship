@@ -5,18 +5,22 @@
 public class Grid {
 	private static final int SIDE_LENGTH = 10;
 	private boolean[][] spaces;
-	private Ship carrier = new Ship(5);
-	private Ship battleship = new Ship(4);
-	private Ship cruiser = new Ship(3);
-	private Ship submarine = new Ship(3);
-	private Ship destroyer = new Ship(2);
+	private Ship carrier;
+	private Ship battleship;
+	private Ship cruiser;
+	private Ship submarine;
+	private Ship destroyer;
 	
 	
 	/*
 	 * Constructor for Grid objects. Initializes the 2D array spaces to be empty initially. 
 	 */
 	public Grid() {
-		
+		destroyer = new Ship(2);
+		submarine = new Ship(3);
+		cruiser = new Ship(3);
+		battleship = new Ship(4);
+		carrier = new Ship(5);
 	}
 	
 	/**
