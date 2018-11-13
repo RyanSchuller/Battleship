@@ -3,8 +3,14 @@
  * This class represents the multiple grids that the player sees and interacts with while playing the game.
  */
 public class Grid {
-	private final int SIDE_LENGTH = 10;
+	private static final int SIDE_LENGTH = 10;
 	private boolean[][] spaces;
+	private Ship carrier = new Ship(5);
+	private Ship battleship = new Ship(4);
+	private Ship cruiser = new Ship(3);
+	private Ship submarine = new Ship(3);
+	private Ship destroyer = new Ship(2);
+	
 	
 	/*
 	 * Constructor for Grid objects. Initializes the 2D array spaces to be empty initially. 
