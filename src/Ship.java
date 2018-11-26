@@ -19,6 +19,10 @@ public class Ship {
 	public Ship(int length) {
 		this.length = length;
 	}
+	
+	public int getLength() {
+		return this.length;
+	}
 	/**
 	 * @param isVertical - a boolean object to determine the direction of the ship
 	 * @param X - Must be an int >= 0 & <= length - 10 for the x coordinate of the ship
