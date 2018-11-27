@@ -14,7 +14,7 @@ public class Grid {
 	private Ship destroyer;
 
 	
-	/*
+	/**
 	 * Constructor for Grid objects. Initializes the 2D array spaces to be empty initially. 
 	 */
 	public Grid() {
@@ -31,6 +31,15 @@ public class Grid {
 			}
 		}
 		
+	}
+	/**
+	 * Checks every ship on the grid to see if they've all been sunk.
+	 * 
+	 * @return Whether a player has lost all of their ships or not. 
+	 */
+	public boolean allShipsSunk() {
+		return destroyer.isSunk() && submarine.isSunk() 
+				&& cruiser.isSunk() && battleship.isSunk() && carrier.isSunk();
 	}
 	
 	/**
