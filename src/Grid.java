@@ -64,15 +64,15 @@ public class Grid {
 		int y=Y;
 		boolean isVert = isVertical;
 
-		int size = S.getLength();
+		int size = S.getLength() -1;
 
 		//these if statements check to see if the edge of the ship would be off the board
-		if(isVert && y+size>=9) {
-			throw new Exception("The ship does not fit on the board at this location (off the bottom of the board)");
+		if(isVert && y+size>=10) {
+			throw new Exception("The ship does not fit on the board at this location (off the bottom of the board) + size");
 		}
 
-		if(!isVert && x+size>=9) {
-			throw new Exception("The ship does not fit on the board at this location (off the right side of the board)");
+		if(!isVert && x+size>=10) {
+			throw new Exception("The ship does not fit on the board at this location (off the right side of the board)" + size);
 		}
 		boolean overlap = false;
 		if(isVert) {
@@ -100,7 +100,7 @@ public class Grid {
 			//if the ship is placed vertically then it starts at the given point and goes downward
 			if(isVertical) {
 				for(int i=0;i<size;i++) {		//the ship takes up as many spots as its size
-					isHere[x][y-i] = true;
+					isHere[x][y+i] = true;
 				}
 			}
 

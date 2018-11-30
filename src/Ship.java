@@ -122,7 +122,7 @@ public class Ship {
 		return placed;
 	}
 	public boolean isLast() {
-		return (length == 2);
+		return (length == 100);
 	}
 
 }

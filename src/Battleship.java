@@ -45,6 +45,8 @@ public class Battleship extends Application {
 		VBox  v = new VBox(atB, g1, l,  ownB, g2);
 		v.setPadding(new Insets(10, 20, 10, 20));
 		v.backgroundProperty().set(new Background(new BackgroundFill(Color.NAVY, CornerRadii.EMPTY, Insets.EMPTY)));
+		v.setMinSize(350, 620);
+		v.setMaxSize(350, 620);
 		Scene scene = new Scene(v);
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -112,164 +114,166 @@ public class Battleship extends Application {
 						}
 
 					}
-					if(nS.isLast()) {
+					Ship cS = g.nextShip();
+					if(cS.isLast()) {
 						display("All placed", "All Ships have been placed");
-						for(int i = 0; i < 10; i++) {
-							for(int j = 0; j < 10; j++) {
-								grid2[i][j].setOnMouseClicked(e -> System.out.print("pie"));
-							}
+					for(int i = 0; i < 10; i++) {
+						for(int j = 0; j < 10; j++) {
+							grid2[i][j].setOnMouseClicked(e -> System.out.print("pie"));
 						}
 					}
-				}
-				else if(btn == MouseButton.SECONDARY){
-					if(!nS.isPlaced() && !nS.isLast()) {
-						try{
-							System.out.println("placing vert at: " + nS + " " + x + " " + y);
-							g.placeShip(nS, x, y, true);
-							placed = true;
-							nS.Placed();
-							for(int i = 0; i < nS.getLength(); i++) {
-								grid2[x][y+i].setStyle("-fx-background-color: #A9A9A9");
-							}
-
-						}
-						catch(Exception e) {
-							display("Error", e.getMessage());
-						}
-
-					}
-					if(nS.isLast()) {
-						display("All Placed", "All ships have been placed");
-						for(int i = 0; i < 10; i++) {
-							for(int j = 0; j < 10; j++) {
-								grid2[i][j].setOnMouseClicked(e -> System.out.print("pie"));
-							}
-						}
-					}
-
-
 				}
 			}
+			else if(btn == MouseButton.SECONDARY){
+				if(!nS.isPlaced() && !nS.isLast()) {
+					try{
+						System.out.println("placing vert at: " + nS + " " + x + " " + y);
+						g.placeShip(nS, x, y, true);
+						placed = true;
+						nS.Placed();
+						for(int i = 0; i < nS.getLength(); i++) {
+							grid2[x][y+i].setStyle("-fx-background-color: #A9A9A9");
+						}
 
-		});
+					}
+					catch(Exception e) {
+						display("Error", e.getMessage());
+					}
+
+				}
+				Ship cS = g.nextShip();
+				if(cS.isLast()) {
+					display("All Placed", "All ships have been placed");
+					for(int i = 0; i < 10; i++) {
+						for(int j = 0; j < 10; j++) {
+							grid2[i][j].setOnMouseClicked(e -> System.out.print("pie"));
+						}
+					}
+				}
+
+
+			}
+		}
+
+	});
 		return button ;
+}
+public GridPane getP1() {
+	GridPane grid = new GridPane();
+	int numRows = 10;
+	int numColumns = 10;
+	for (int row = 0 ; row < numRows ; row++ ){
+		RowConstraints rc = new RowConstraints();
+		rc.setFillHeight(true);
+		rc.setVgrow(Priority.ALWAYS);
+		grid.getRowConstraints().add(rc);
 	}
-	public GridPane getP1() {
-		GridPane grid = new GridPane();
-		int numRows = 10;
-		int numColumns = 10;
-		for (int row = 0 ; row < numRows ; row++ ){
-			RowConstraints rc = new RowConstraints();
-			rc.setFillHeight(true);
-			rc.setVgrow(Priority.ALWAYS);
-			grid.getRowConstraints().add(rc);
-		}
-		for (int col = 0 ; col < numColumns; col++ ) {
-			ColumnConstraints cc = new ColumnConstraints();
-			cc.setFillWidth(true);
-			cc.setHgrow(Priority.ALWAYS);
-			grid.getColumnConstraints().add(cc);
-			grid.setHgap(1.5); 
-			grid.setVgap(1.5); 
-		}
-
-		for (int i = 0; i < 100; i++) {
-			Button button = createButton(Integer.toString(i%10, i/10));
-			grid1[i%10][i/10] = button;
-			grid.add(button, i % 10, i / 10);
-		}
-
-		return grid;
-	}
-	public GridPane getP2() {
-		GridPane grid = new GridPane();
-		int numRows = 10;
-		int numColumns = 10;
-		for (int row = 0 ; row < numRows ; row++ ){
-			RowConstraints rc = new RowConstraints();
-			rc.setFillHeight(true);
-			rc.setVgrow(Priority.ALWAYS);
-			grid.getRowConstraints().add(rc);
-		}
-		for (int col = 0 ; col < numColumns; col++ ) {
-			ColumnConstraints cc = new ColumnConstraints();
-			cc.setFillWidth(true);
-			cc.setHgrow(Priority.ALWAYS);
-			grid.getColumnConstraints().add(cc);
-			grid.setHgap(1.5); 
-			grid.setVgap(1.5); 
-		}
-
-		for (int i = 0; i < 100; i++) {
-			Button button = createPlaceButton(Integer.toString(i%10, i/10), i%10, i/10);
-			grid2[i%10][i/10] = button;
-			grid.add(button, i % 10, i / 10);
-		}
-
-		return grid;
+	for (int col = 0 ; col < numColumns; col++ ) {
+		ColumnConstraints cc = new ColumnConstraints();
+		cc.setFillWidth(true);
+		cc.setHgrow(Priority.ALWAYS);
+		grid.getColumnConstraints().add(cc);
+		grid.setHgap(1.5); 
+		grid.setVgap(1.5); 
 	}
 
-	public static void main(String[] args) {
-		launch(args);
-
+	for (int i = 0; i < 100; i++) {
+		Button button = createButton(Integer.toString(i%10, i/10));
+		grid1[i%10][i/10] = button;
+		grid.add(button, i % 10, i / 10);
 	}
-	public void closeProgram() {
-		Boolean an = ConfirmBox("Close?", "");
-		if(an) {
-			primaryStage.close();
-		}
+
+	return grid;
+}
+public GridPane getP2() {
+	GridPane grid = new GridPane();
+	int numRows = 10;
+	int numColumns = 10;
+	for (int row = 0 ; row < numRows ; row++ ){
+		RowConstraints rc = new RowConstraints();
+		rc.setFillHeight(true);
+		rc.setVgrow(Priority.ALWAYS);
+		grid.getRowConstraints().add(rc);
 	}
-	public static void display(String title, String message) {
-		Stage window = new Stage();
-
-		window.initModality(Modality.APPLICATION_MODAL);
-		window.setTitle(title);
-		window.setMinWidth(250);
-
-		Label label = new Label();
-		label.setText(message);
-		Button closeButton = new Button("close");
-		closeButton.setOnAction(e -> window.close());
-
-		VBox lay = new VBox(10);
-		lay.getChildren().addAll(label, closeButton);
-		lay.setAlignment(Pos.CENTER);
-
-		Scene sce = new Scene(lay);
-		window.setScene(sce);
-		window.showAndWait();
-
-
+	for (int col = 0 ; col < numColumns; col++ ) {
+		ColumnConstraints cc = new ColumnConstraints();
+		cc.setFillWidth(true);
+		cc.setHgrow(Priority.ALWAYS);
+		grid.getColumnConstraints().add(cc);
+		grid.setHgap(1.5); 
+		grid.setVgap(1.5); 
 	}
-	public boolean ConfirmBox(String title, String message) {
-		Stage window = new Stage();
-		window.initModality(Modality.APPLICATION_MODAL);
-		window.setTitle(title);
-		window.setMinWidth(250);
-		Label label = new Label();
-		label.setText(message);
 
-		Button yes = new Button("Yes");
-		Button no = new Button("No");
-
-		yes.setOnAction(e -> {
-			answ = true;
-			window.close();
-		});
-
-		no.setOnAction(e -> {
-			answ = false;
-			window.close();
-		});
-
-		VBox lay = new VBox(10);
-		lay.getChildren().addAll(label, yes, no);
-		lay.setAlignment(Pos.CENTER);
-		Scene sce = new Scene(lay);
-		window.setScene(sce);
-		window.showAndWait();
-
-		return answ;
+	for (int i = 0; i < 100; i++) {
+		Button button = createPlaceButton(Integer.toString(i%10, i/10), i%10, i/10);
+		grid2[i%10][i/10] = button;
+		grid.add(button, i % 10, i / 10);
 	}
+
+	return grid;
+}
+
+public static void main(String[] args) {
+	launch(args);
+
+}
+public void closeProgram() {
+	Boolean an = ConfirmBox("Close?", "");
+	if(an) {
+		primaryStage.close();
+	}
+}
+public static void display(String title, String message) {
+	Stage window = new Stage();
+
+	window.initModality(Modality.APPLICATION_MODAL);
+	window.setTitle(title);
+	window.setMinWidth(250);
+
+	Label label = new Label();
+	label.setText(message);
+	Button closeButton = new Button("close");
+	closeButton.setOnAction(e -> window.close());
+
+	VBox lay = new VBox(10);
+	lay.getChildren().addAll(label, closeButton);
+	lay.setAlignment(Pos.CENTER);
+
+	Scene sce = new Scene(lay);
+	window.setScene(sce);
+	window.showAndWait();
+
+
+}
+public boolean ConfirmBox(String title, String message) {
+	Stage window = new Stage();
+	window.initModality(Modality.APPLICATION_MODAL);
+	window.setTitle(title);
+	window.setMinWidth(250);
+	Label label = new Label();
+	label.setText(message);
+
+	Button yes = new Button("Yes");
+	Button no = new Button("No");
+
+	yes.setOnAction(e -> {
+		answ = true;
+		window.close();
+	});
+
+	no.setOnAction(e -> {
+		answ = false;
+		window.close();
+	});
+
+	VBox lay = new VBox(10);
+	lay.getChildren().addAll(label, yes, no);
+	lay.setAlignment(Pos.CENTER);
+	Scene sce = new Scene(lay);
+	window.setScene(sce);
+	window.showAndWait();
+
+	return answ;
+}
 
 }
