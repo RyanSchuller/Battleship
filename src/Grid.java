@@ -1,4 +1,5 @@
-
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * This class represents the multiple grids that the player sees and interacts with while playing the game.
@@ -48,6 +49,29 @@ public class Grid {
 				&& cruiser.isSunk() && battleship.isSunk() && carrier.isSunk();
 	}
 
+	public void randomSet() {
+		ArrayList<Ship> shipsList = new ArrayList<>();
+		shipsList.add(carrier);
+		shipsList.add(cruiser);
+		shipsList.add(battleship);
+		shipsList.add(submarine);
+		shipsList.add(destroyer);
+		
+		Random rand = new Random(10);
+		boolean placed = false;
+		
+		for(Ship s : shipsList) {
+			while(!placed) {
+				try {
+					placeShip(s,rand.nextInt(), rand.nextInt(), rand.nextBoolean());
+					placed = true;
+				}
+				catch(Exception e) {
+				}
+			}
+		}
+	}
+	
 	/**
 	 * Takes in a ship object, an x coordinate, a y coordinate, and a boolean to determine if it is vertical or not.
 	 * It then places the ship onto the grid at that spot.
