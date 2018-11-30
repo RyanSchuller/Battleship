@@ -92,8 +92,7 @@ public class Grid {
 	 * Handles a players attempt to hit the opponent's ships. 
 	 * It uses methods from ship like isHit and isSunk.
 	 */
-	//i have no idea what the point of this class is 
-	//changed to have parameters
+	
 	public void attack(int X, int Y) {
 		if(!isEmpty(X,Y)) {
 			if(carrier.isHit(X,Y) || cruiser.isHit(X,Y) || submarine.isHit(X,Y) ||
