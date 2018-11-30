@@ -14,7 +14,6 @@ public class Grid {
 	public Ship submarine;
 	public Ship destroyer;
 	private Ship nullship;
-	private int numPlaced;
 
 
 	/**

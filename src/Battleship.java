@@ -1,7 +1,4 @@
-/**
- * Top level class responsible for running the battleship game through the Game class.
- */
-import java.io.File;
+
 import javax.script.Bindings;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -17,6 +14,9 @@ import javafx.scene.paint.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * Top level class responsible for running the battleship game through the Game class.
+ */
 public class Battleship extends Application {
 	private Stage primaryStage;
 	private boolean answ;
