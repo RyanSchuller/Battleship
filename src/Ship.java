@@ -35,7 +35,7 @@ public class Ship {
 		this.isVertical = isVertical;
 		this.x = x;
 		this.y = y;
-		/** Already sorted will have to discuss this.
+		/** Already sorted will have to discuss this
 		if(isVertical && x >= 0 && x < 10) { 
 			this.x = x;
 		}

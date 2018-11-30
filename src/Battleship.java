@@ -15,7 +15,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * Top level class responsible for running the battleship game through the Game class.
+ * Top level class responsible for running the battleship game through the Game class..
  */
 public class Battleship extends Application {
 	private Stage primaryStage;

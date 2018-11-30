@@ -122,7 +122,7 @@ public class Grid {
 
 
 	/**
-	 * Handles a players attempt to hit the opponent's ships. 
+	 * Handles a players attempt to hit the opponent's ships.. 
 	 * It uses methods from ship like isHit and isSunk.
 	 */
 	//i have no idea what the point of this class is 
