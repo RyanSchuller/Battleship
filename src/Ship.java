@@ -10,6 +10,7 @@ public class Ship {
 	private int y;
 	private int length;
 	private boolean isVertical;
+	private boolean placed;
 
 	/**
 	 * this constructor makes a ship object with parameters to determine the size
@@ -32,7 +33,9 @@ public class Ship {
 	 */
 	public void setLocation(int x, int y, boolean isVertical) throws Exception{
 		this.isVertical = isVertical;
-		if(isVertical && x >= 0 && x < 10) {
+		this.x = x;
+		this.y = y;
+		/**if(isVertical && x >= 0 && x < 10) {
 			this.x = x;
 		}
 		else if(!isVertical && x >= 0 && x <= (length - 10)) {
@@ -49,7 +52,7 @@ public class Ship {
 		}
 		else {
 			throw new Exception("y value not in range");
-		}
+		}**/
 	}
 
 	/**
@@ -64,6 +67,28 @@ public class Ship {
 	/**
 	 * Checks to see if a player's attack has hit a ship or not.
 	 */
+	public boolean isHere(int locX, int locY) {
+		if(isVertical && locY == y) { //If the ship is vertical only one column matters
+			for(int i = x; i < (x + length); i++) {
+				//Loop through every row to see if the user entered row matches one the 
+				//ship is in
+				if(locX == i) {
+					return true;
+				}
+			}
+		}
+		else if(!isVertical && locX == x) {
+			//If the ship is horizontal only one row matters
+			for(int i = y; i < (y + length); i++) {
+				//Loop through every column to see if the user entered column matches
+				//one the ship is in
+				if(locY == i) {
+					return true;
+				}
+			}
+		}
+		return false; //If this line is reached the ship wasn't hit
+	}
 	public boolean isHit(int attackX, int attackY) {
 		if(isVertical && attackY == y) { //If the ship is vertical only one column matters
 			for(int i = x; i < (x + length); i++) {
@@ -87,6 +112,16 @@ public class Ship {
 			}
 		}
 		return false; //If this line is reached the ship wasn't hit
+	}
+	
+	public void Placed() {
+		placed = true;
+	}
+	public boolean isPlaced() {
+		return placed;
+	}
+	public boolean isLast() {
+		return (length == 2);
 	}
 
 }
