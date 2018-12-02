@@ -20,7 +20,9 @@ public class Ship {
 	public Ship(int length) {
 		this.length = length;
 	}
-	
+	 /**
+	  * @return the length of the ship
+	  */
 	public int getLength() {
 		return this.length;
 	}
@@ -44,7 +46,13 @@ public class Ship {
 		return length == hitsTaken;
 	}
 
-	
+	/**
+	 * Checks to see if the ship is hit and if so adds to the counter recording the number
+	 * of hits
+	 * @param attackX the x coordinate of the attack
+	 * @param attackY the y coordinate of the attack
+	 * @return whether or not the ship has been hit
+	 */
 	public boolean isHit(int attackX, int attackY) {
 		if(isVertical && attackY == y) { //If the ship is vertical only one column matters
 			for(int i = x; i < (x + length); i++) {
