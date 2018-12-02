@@ -88,7 +88,10 @@ public class Battleship extends Application {
 						if(aiGrid.allShipsSunk()) {
 							// TODO: End game and print victory message.
 						}
-						 // playerGrid.aiAttack();
+						playerGrid.aiAttack();
+						
+						// TODO: Show player if they were hit or not.
+						
 						if(playerGrid.allShipsSunk()) {
 							// TODO: End game and print loss message.
 						}

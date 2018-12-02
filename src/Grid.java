@@ -8,6 +8,7 @@ import java.util.Random;
 public class Grid {
 	private static final int SIDE_LENGTH = 10;
 	private boolean[][] spaces;
+	private boolean[][] hitAlready;
 	public Ship carrier;
 	public Ship battleship;
 	public Ship cruiser;
@@ -21,6 +22,7 @@ public class Grid {
 	 */
 	public Grid() {
 		spaces = new boolean[SIDE_LENGTH][SIDE_LENGTH];
+		hitAlready = new boolean[SIDE_LENGTH][SIDE_LENGTH];
 		destroyer = new Ship(2);
 		submarine = new Ship(3);
 		cruiser = new Ship(3);
@@ -32,6 +34,7 @@ public class Grid {
 		for(int i=0;i<SIDE_LENGTH;i++) {
 			for(int j=0;j<SIDE_LENGTH;j++) {
 				spaces[i][j] = false;
+				hitAlready[i][j] = false;
 			}
 		}
 
@@ -102,14 +105,14 @@ public class Grid {
 		}
 		boolean overlap = false;
 		if(isVert) {
-			for(int i = 0; i < size; i++) {
+			for(int i = 0; i < size+1; i++) {
 				if(spaces[x][y+i]) {
 					overlap = true;
 				}
 			}
 		}
 		else {
-			for(int i = 0; i < size; i++) {
+			for(int i = 0; i < size+1; i++) {
 				if(spaces[x+i][y]) {
 					overlap = true;
 				}
@@ -125,14 +128,14 @@ public class Grid {
 
 			//if the ship is placed vertically then it starts at the given point and goes downward
 			if(isVertical) {
-				for(int i=0;i<size;i++) {		//the ship takes up as many spots as its size
+				for(int i=0;i<size+1;i++) {		//the ship takes up as many spots as its size
 					spaces[x][y+i] = true;
 				}
 			}
 
 			//if the ship is placed horizontally then it starts at the given point and moves rightward 
 			if(!isVertical) {
-				for(int i=0;i<size;i++) {	//the ship takes up as many spots as its size
+				for(int i=0;i<size+1;i++) {	//the ship takes up as many spots as its size
 					spaces[x+i][y] = true;
 				}
 			}
@@ -160,6 +163,27 @@ public class Grid {
 			}
 		return hit;
 
+	}
+	
+	public void aiAttack() {
+		
+		Random rand = new Random();
+		boolean attacked = false;
+		
+		// If there isn't a known ship nearby.
+		
+		while(!attacked) {
+			int a = rand.nextInt(10);
+			int b = rand.nextInt(10);
+			if(!hitAlready[a][b]) {
+				attack(a,b);
+				hitAlready[a][b] = true;
+				attacked = true;
+			}
+		}
+		
+		// TODO: If there is a known ship nearby (If one of last 4 hits was successful).
+		
 	}
 
 	/**
