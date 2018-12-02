@@ -71,17 +71,12 @@ public class Battleship extends Application {
 					}
 					else {
 						button.setStyle("-fx-background-color: #7FFF00");
-
-
 					}
-
 				}
 				else if(btn == MouseButton.SECONDARY){
 					button.setStyle("-fx-background-color: #FF0000");
 				}
-
 			}
-
 		});
 		return button ;
 	}
