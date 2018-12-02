@@ -58,13 +58,13 @@ public class Grid {
 		shipsList.add(submarine);
 		shipsList.add(destroyer);
 		
-		Random rand = new Random(10);
+		Random rand = new Random();
 		boolean placed = false;
 		
 		for(Ship s : shipsList) {
 			while(!placed) {
 				try {
-					placeShip(s,rand.nextInt(), rand.nextInt(), rand.nextBoolean());
+					placeShip(s,rand.nextInt(10), rand.nextInt(10), rand.nextBoolean());
 					placed = true;
 				}
 				catch(Exception e) {
