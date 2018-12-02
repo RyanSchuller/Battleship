@@ -54,8 +54,8 @@ public class Ship {
 	 * @return whether or not the ship has been hit
 	 */
 	public boolean isHit(int attackX, int attackY) {
-		if(isVertical && attackY == y) { //If the ship is vertical only one column matters
-			for(int i = x; i < (x + length); i++) {
+		if(isVertical && attackY == x) { //If the ship is vertical only one column matters
+			for(int i = y; i < (y + length); i++) {
 				//Loop through every row to see if the user entered row matches one the 
 				//ship is in
 				if(attackX == i) {
@@ -64,9 +64,9 @@ public class Ship {
 				}
 			}
 		}
-		else if(!isVertical && attackX == x) {
+		else if(!isVertical && attackX == y) {
 			//If the ship is horizontal only one row matters
-			for(int i = y; i < (y + length); i++) {
+			for(int i = x; i < (x + length); i++) {
 				//Loop through every column to see if the user entered column matches
 				//one the ship is in
 				if(attackY == i) {
