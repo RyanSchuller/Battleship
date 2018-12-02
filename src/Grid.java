@@ -21,7 +21,6 @@ public class Grid {
 	 */
 	public Grid() {
 		spaces = new boolean[SIDE_LENGTH][SIDE_LENGTH];
-		spaces = new boolean[SIDE_LENGTH][SIDE_LENGTH];
 		destroyer = new Ship(2);
 		submarine = new Ship(3);
 		cruiser = new Ship(3);
@@ -32,7 +31,6 @@ public class Grid {
 		//sets each location in the array to false
 		for(int i=0;i<SIDE_LENGTH;i++) {
 			for(int j=0;j<SIDE_LENGTH;j++) {
-				spaces[i][j] = false;
 				spaces[i][j] = false;
 			}
 		}
