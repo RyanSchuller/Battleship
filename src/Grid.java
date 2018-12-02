@@ -161,8 +161,8 @@ public class Grid {
 					destroyer.isHit(X,Y) || battleship.isHit(X,Y)) {
 				hit = true;
 			}
-		return hit;
-
+			hitAlready[X][Y] = true;
+			return hit;
 	}
 	
 	public void aiAttack() {
