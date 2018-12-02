@@ -20,12 +20,10 @@ public class Battleship extends Application {
 	private Stage primaryStage;
 	private boolean answ;
 	private Grid playerGrid;
+	private Grid aiGrid;
 	public Button[][] grid1;
 	public Button[][] grid2;
-	
-	//private Grid playerGrid = new Grid();
-	private Grid aiGrid;
-	private Grid playerView;
+
 
 	@Override
 	public void start(Stage ps) {
