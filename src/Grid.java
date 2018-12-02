@@ -85,42 +85,42 @@ public class Grid {
 	}
 	
 	/**
-	 * Takes in a ship object, an x coordinate, a y coordinate, and a boolean to determine if it is vertical or not.
+	 * Takes in a ship object, an y coordinate, a x coordinate, and a boolean to determine if it is vertical or not.
 	 * It then places the ship onto the grid at that spot.
 	 * 
 	 * @param S - must be an initialized Ship object.
-	 * @param X - must be an int between 0 and 9, inclusive.
-	 * @param Y - must be an int between 0 and 9, inclusive.
-	 * @param isVertical - determines if the ship is placed vertically or horizontally at the X,Y coordinate given.
+	 * @param y - must be an int between 0 and 9, inclusive.
+	 * @param x - must be an int between 0 and 9, inclusive.
+	 * @param isVertical - determines if the ship is placed vertically or horizontally at the y,x coordinate given.
 	 * @throws Exception when ship is trying to be placed off the board
 	 */
 
-	public void placeShip(Ship S, int X, int Y, boolean isVertical) throws Exception {
-		int x=X;
+	public void placeShip(Ship S, int Y, int X, boolean isVertical) throws Exception {
 		int y=Y;
+		int x=X;
 		boolean isVert = isVertical;
 
 		int size = S.getLength() -1;
 
 		//these if statements check to see if the edge of the ship would be off the board
-		if(isVert && y+size>=10) {
+		if(isVert && x+size>=10) {
 			throw new Exception("The ship does not fit on the board at this location (off the bottom of the board) + size");
 		}
 
-		if(!isVert && x+size>=10) {
+		if(!isVert && y+size>=10) {
 			throw new Exception("The ship does not fit on the board at this location (off the right side of the board)" + size);
 		}
 		boolean overlap = false;
 		if(isVert) {
 			for(int i = 0; i < size+1; i++) {
-				if(spaces[x][y+i]) {
+				if(spaces[y][x+i]) {
 					overlap = true;
 				}
 			}
 		}
 		else {
 			for(int i = 0; i < size+1; i++) {
-				if(spaces[x+i][y]) {
+				if(spaces[y+i][x]) {
 					overlap = true;
 				}
 			}
@@ -131,19 +131,19 @@ public class Grid {
 
 		try {
 
-			S.setLocation(x, y, isVert);
+			S.setLocation(y, x, isVert);
 
 			//if the ship is placed vertically then it starts at the given point and goes downward
 			if(isVertical) {
 				for(int i=0;i<size+1;i++) {		//the ship takes up as many spots as its size
-					spaces[x][y+i] = true;
+					spaces[y][x+i] = true;
 				}
 			}
 
 			//if the ship is placed horizontally then it starts at the given point and moves rightward 
 			if(!isVertical) {
 				for(int i=0;i<size+1;i++) {	//the ship takes up as many spots as its size
-					spaces[x+i][y] = true;
+					spaces[y+i][x] = true;
 				}
 			}
 		}
@@ -160,20 +160,20 @@ public class Grid {
 	 * It uses methods from ship like isHit and isSunk.
 	 */
 
-	public boolean attack(int X, int Y) {
+	public boolean attack(int y, int x) {
 		boolean hit = false;
-			if(carrier.isHit(X,Y) || cruiser.isHit(X,Y) || submarine.isHit(X,Y) ||
-					destroyer.isHit(X,Y) || battleship.isHit(X,Y)) {
+			if(carrier.isHit(y,x) || cruiser.isHit(y,x) || submarine.isHit(y,x) ||
+					destroyer.isHit(y,x) || battleship.isHit(y,x)) {
 				hit = true;
 			}
-			hitAlready[X][Y] = true;
+			hitAlready[y][x] = true;
 			return hit;
 	}
 	
 	public boolean aiAttack() {		
 		
-		int X;
-		int Y;		
+		int y;
+		int x;		
 		Random rand = new Random();
 		boolean attacked = false;
 		boolean hit = false;
@@ -189,57 +189,67 @@ public class Grid {
 					lastHitX = a;
 					lastHitY = b;
 					hitAlready[a][b] = true;
-					int[] coordinates = {a,b};
-					hitCoord.add(coordinates);
+					if(hit) {
+						int[] coordinates = {a,b};
+						hitCoord.add(coordinates);
+					}
 					attacked = true;
 				}
 			}
 			else if(hitCoord.size()==1) {		//if they just got a successful hit
-				X = hitCoord.get(0)[0];
-				Y = hitCoord.get(0)[1];
+				y = hitCoord.get(0)[0];
+				x = hitCoord.get(0)[1];
 				
-				if(!hitAlready[X+1][Y]) {		//hits to the right of the successful hit
-					hit = attack(X+1,Y);
-					lastHitX = X+1;
-					lastHitY = Y;
-					hitAlready[X+1][Y] = true;
-					int[] coordinates = {X+1,Y};
-					hitCoord.add(coordinates);
+				if(!hitAlready[y+1][x]) {		//hits to the right of the successful hit
+					hit = attack(y+1,x);
+					lastHitX = y+1;
+					lastHitY = x;
+					hitAlready[y+1][x] = true;
+					if(hit) {
+						int[] coordinates = {y+1,x};
+						hitCoord.add(coordinates);
+					}
 					attacked = true;
 				}
-				else if(!hitAlready[X][Y-1]) {	//hits above the successful hit
-					hit = attack(X,Y-1);
-					lastHitX = X;
-					lastHitY = Y-1;
-					hitAlready[X][Y-1] = true;
-					int[] coordinates = {X,Y-1};
-					hitCoord.add(coordinates);
+				else if(!hitAlready[y][x-1]) {	//hits above the successful hit
+					hit = attack(y,x-1);
+					lastHitX = y;
+					lastHitY = x-1;
+					hitAlready[y][x-1] = true;
+					if(hit) {
+						int[] coordinates = {y,x-1};
+						hitCoord.add(coordinates);
+					}
 					attacked = true;
 				}
-				else if(!hitAlready[X-1][Y]) {	//hits left of the successful hit
-					hit = attack(X-1,Y);
-					lastHitX = X-1;
-					lastHitY = Y;
-					hitAlready[X-1][Y] = true;
-					int[] coordinates = {X-1,Y};
-					hitCoord.add(coordinates);
+				else if(!hitAlready[y-1][x]) {	//hits left of the successful hit
+					hit = attack(y-1,x);
+					lastHitX = y-1;
+					lastHitY = x;
+					hitAlready[y-1][x] = true;
+					if(hit) {
+						int[] coordinates = {y-1,x};
+						hitCoord.add(coordinates);
+					}
 					attacked = true;
 				}
-				else if(!hitAlready[X][Y+1]) {	//hits below the successful hit
-					hit = attack(X,Y+1);
-					lastHitX = X;
-					lastHitY = Y+1;
-					hitAlready[X][Y+1] = true;
-					int[] coordinates = {X,Y+1};
-					hitCoord.add(coordinates);
+				else if(!hitAlready[y][x+1]) {	//hits below the successful hit
+					hit = attack(y,x+1);
+					lastHitX = y;
+					lastHitY = x+1;
+					hitAlready[y][x+1] = true;
+					if(hit) {
+						int[] coordinates = {y,x+1};
+						hitCoord.add(coordinates);
+					}
 					attacked = true;
 				}
 			}
 			
 			else if(hitCoord.size()>1) {		// if the user hits the ship multiple times
 				
-				X = hitCoord.get(hitCoord.size()-1)[0];
-				Y = hitCoord.get(hitCoord.size()-1)[1];
+				y = hitCoord.get(hitCoord.size()-1)[0];
+				x = hitCoord.get(hitCoord.size()-1)[1];
 				
 				int lowerX;
 				int lowerY;
@@ -253,20 +263,22 @@ public class Grid {
 
 				}
 				
-				if(hitCoord.get(0)[0]==hitCoord.get(1)[0]) {	//if the x values are the same
+				if(hitCoord.get(0)[0]==hitCoord.get(1)[0]) {	//if the y values are the same
 					
 		
 		//if the second hit is above the first hit
 					if(hitCoord.get(0)[1]<hitCoord.get(1)[1]) {
 						
 						//only for vertical guessing
-						if(!hitAlready[X][Y-1]) {	//checks above the most recent hit
-							hit = attack(X,Y-1);
-							lastHitX = X;
-							lastHitY = Y-1;
-							hitAlready[X][Y-1] = true;
-							int[] coordinates = {X,Y-1};
-							hitCoord.add(coordinates);
+						if(!hitAlready[y][x-1]) {	//checks above the most recent hit
+							hit = attack(y,x-1);
+							lastHitX = y;
+							lastHitY = x-1;
+							hitAlready[y][x-1] = true;
+							if(hit) {
+								int[] coordinates = {y,x-1};
+								hitCoord.add(coordinates);
+							}
 							attacked = true;
 						}
 						
@@ -275,13 +287,13 @@ public class Grid {
 							lastHitX = lowerX;
 							lastHitY = lowerY+1;
 							hitAlready[lowerX][lowerY+1] = true;
-							int[] coordinates = {lowerX,lowerY+1};
 							if(hit) {
+								int[] coordinates = {lowerX,lowerY+1};
+								hitCoord.add(coordinates);
 								lowerX = hitCoord.get(hitCoord.size()-1)[0];
 								lowerY = hitCoord.get(hitCoord.size()-1)[1];
 								aiLowerHit = true;
 							}
-							hitCoord.add(coordinates);
 							attacked = true;
 						}
 						else {
@@ -296,13 +308,15 @@ public class Grid {
 					if(hitCoord.get(0)[1]>hitCoord.get(1)[1]) {	
 						
 						//only for vertical guessing
-						if(!hitAlready[X][Y+1]) {	//checks below the most recent hit
-							hit = attack(X,Y+1);
-							lastHitX = X;
-							lastHitY = Y+1;
-							hitAlready[X][Y+1] = true;
-							int[] coordinates = {X,Y+1};
-							hitCoord.add(coordinates);
+						if(!hitAlready[y][x+1]) {	//checks below the most recent hit
+							hit = attack(y,x+1);
+							lastHitX = y;
+							lastHitY = x+1;
+							hitAlready[y][x+1] = true;
+							if(hit) {
+								int[] coordinates = {y,x+1};
+								hitCoord.add(coordinates);
+							}
 							attacked = true;
 						}
 						
@@ -311,9 +325,9 @@ public class Grid {
 							lastHitX = lowerX;
 							lastHitY = lowerY-1;
 							hitAlready[lowerX][lowerY-1] = true;
-							int[] coordinates = {lowerX,lowerY-1};
-							hitCoord.add(coordinates);
 							if(hit) {
+								int[] coordinates = {lowerX,lowerY-1};
+								hitCoord.add(coordinates);
 								lowerX = hitCoord.get(hitCoord.size()-1)[0];
 								lowerY = hitCoord.get(hitCoord.size()-1)[1];
 								aiLowerHit = true;
@@ -334,13 +348,15 @@ public class Grid {
 					if(hitCoord.get(0)[0]<hitCoord.get(1)[0]) {	
 						
 						//only for horizontal guessing
-						if(!hitAlready[X+1][Y]) {	//checks right of the most recent hit
-							hit = attack(X+1,Y);
-							lastHitX = X+1;
-							lastHitY = Y;
-							hitAlready[X+1][Y] = true;
-							int[] coordinates = {X+1,Y};
-							hitCoord.add(coordinates);
+						if(!hitAlready[y+1][x]) {	//checks right of the most recent hit
+							hit = attack(y+1,x);
+							lastHitX = y+1;
+							lastHitY = x;
+							hitAlready[y+1][x] = true;
+							if(hit) {
+								int[] coordinates = {y+1,x};
+								hitCoord.add(coordinates);
+							}
 							attacked = true;
 						}
 						
@@ -349,9 +365,9 @@ public class Grid {
 							lastHitX = lowerX-1;
 							lastHitY = lowerY;
 							hitAlready[lowerX-1][lowerY] = true;
-							int[] coordinates = {lowerX-1,lowerY};
-							hitCoord.add(coordinates);
 							if(hit) {
+								int[] coordinates = {lowerX-1,lowerY};
+								hitCoord.add(coordinates);
 								lowerX = hitCoord.get(hitCoord.size()-1)[0];
 								lowerY = hitCoord.get(hitCoord.size()-1)[1];
 								aiLowerHit = true;
@@ -369,13 +385,15 @@ public class Grid {
 					if(hitCoord.get(0)[0]>hitCoord.get(1)[0]) {	
 						
 						//only for horizontal guessing
-						if(!hitAlready[X-1][Y]) {	//checks left of the recent hit
-							hit = attack(X-1,Y);
-							lastHitX = X-1;
-							lastHitY = Y;
-							hitAlready[X-1][Y] = true;
-							int[] coordinates = {X-1,Y};
-							hitCoord.add(coordinates);
+						if(!hitAlready[y-1][x]) {	//checks left of the recent hit
+							hit = attack(y-1,x);
+							lastHitX = y-1;
+							lastHitY = x;
+							hitAlready[y-1][x] = true;
+							if(hit) {
+								int[] coordinates = {y-1,x};
+								hitCoord.add(coordinates);
+							}
 							attacked = true;
 						}
 						
@@ -384,9 +402,9 @@ public class Grid {
 							lastHitX = lowerX-1;
 							lastHitY = lowerY;
 							hitAlready[lowerX-1][lowerY] = true;
-							int[] coordinates = {lowerX-1,lowerY};
-							hitCoord.add(coordinates);
 							if(hit) {
+								int[] coordinates = {lowerX-1,lowerY};
+								hitCoord.add(coordinates);
 								lowerX = hitCoord.get(hitCoord.size()-1)[0];
 								lowerY = hitCoord.get(hitCoord.size()-1)[1];
 								aiLowerHit = true;
@@ -409,12 +427,12 @@ public class Grid {
 	 * Checks a given spot on the grid and returns whether the spot is empty or not.
 	 * 
 	 * This method can be used in attack
-	 * @param X - must be an int between 1 and 10, inclusive.
-	 * @param Y - must be an int between 1 and 10, inclusive.
+	 * @param y - must be an int between 1 and 10, inclusive.
+	 * @param x - must be an int between 1 and 10, inclusive.
 	 * @return true if the given space is empty, false if it is occupied by a ship.
 	 */
-	public boolean isEmpty(int X, int Y) {
-		if(spaces[X][Y]==true) {
+	public boolean isEmpty(int y, int x) {
+		if(spaces[y][x]==true) {
 			return false;
 		}
 		return true;
