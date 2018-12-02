@@ -15,7 +15,7 @@ public class Ship {
 	/**
 	 * this constructor makes a ship object with parameters to determine the size
 	 * @param length - Must be an int <= 5 but doesn't need to be checked since preset
-	 * 		ships will be used
+	 * 	ships will be used
 	 */
 	public Ship(int length) {
 		this.length = length;
