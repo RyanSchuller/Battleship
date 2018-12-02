@@ -1,4 +1,3 @@
-
 import javax.script.Bindings;
 import javafx.application.Application;
 import javafx.event.EventHandler;
