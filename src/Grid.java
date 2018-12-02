@@ -62,6 +62,7 @@ public class Grid {
 		boolean placed = false;
 		
 		for(Ship s : shipsList) {
+			placed = false;
 			while(!placed) {
 				try {
 					placeShip(s,rand.nextInt(10), rand.nextInt(10), rand.nextBoolean());
@@ -172,7 +173,7 @@ public class Grid {
 	 * @param Y - must be an int between 1 and 10, inclusive.
 	 * @return true if the given space is empty, false if it is occupied by a ship.
 	 */
-	private boolean isEmpty(int X, int Y) {
+	public boolean isEmpty(int X, int Y) {
 		if(spaces[X][Y]==true) {
 			return false;
 		}

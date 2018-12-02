@@ -20,15 +20,30 @@ import javafx.stage.Stage;
 public class Battleship extends Application {
 	private Stage primaryStage;
 	private boolean answ;
-	private Grid g;
+	private Grid playerGrid;
 	public Button[][] grid1;
 	public Button[][] grid2;
+	
+	//private Grid playerGrid = new Grid();
+	private Grid aiGrid;
+	private Grid playerView;
 
 	@Override
 	public void start(Stage ps) {
 		grid1 = new Button[10][10];
 		grid2 = new Button[10][10];
-		g = new Grid();
+		
+		playerGrid = new Grid();
+		aiGrid = new Grid();
+		
+		aiGrid.randomSet();
+		for(int i = 0; i < 10; i++) {
+			for(int x = 0; x < 10; x++) {
+				System.out.print(!aiGrid.isEmpty(i, x));
+			}
+			System.out.println();
+		}
+		
 		primaryStage = ps;
 		GridPane g1 = new GridPane();
 		g1 = getP1();
@@ -56,7 +71,7 @@ public class Battleship extends Application {
 		});
 	}
 
-	private Button createButton(String text) {
+	private Button createButton(String text, int x, int y) {
 		Button button = new Button("");
 		button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		button.setStyle("-fx-background-color: #0080ff");
@@ -66,15 +81,25 @@ public class Battleship extends Application {
 			public void handle(MouseEvent event) {
 				MouseButton btn = event.getButton();
 				if(btn==MouseButton.PRIMARY){
-					if(button.getStyle() == "-fx-background-color: #7FFF00" || button.getStyle() == "-fx-background-color: #FFFFFF") {
+					if(button.getStyle() == "-fx-background-color: #FFFFFF" || button.getStyle() == "-fx-background-color: #FF0000") {
 						display("Already Hit", "This tile has already been hit, please select again");
 					}
 					else {
-						button.setStyle("-fx-background-color: #7FFF00");
+						if(aiGrid.attack(x, y)) {
+							button.setStyle("-fx-background-color: #FF0000");
+						}
+						else {
+							button.setStyle("-fx-background-color: #FFFFFF");
+						}
+						if(aiGrid.allShipsSunk()) {
+							// TODO: End game and print victory message.
+						}
+						 // playerGrid.aiAttack();
+						if(playerGrid.allShipsSunk()) {
+							// TODO: End game and print loss message.
+						}
+						
 					}
-				}
-				else if(btn == MouseButton.SECONDARY){
-					button.setStyle("-fx-background-color: #FF0000");
 				}
 			}
 		});
@@ -90,13 +115,13 @@ public class Battleship extends Application {
 			@Override
 			public void handle(MouseEvent event) {
 				boolean placed = false;
-				Ship nS = g.nextShip();
+				Ship nS = playerGrid.nextShip();
 				MouseButton btn = event.getButton();
 				if(btn==MouseButton.PRIMARY){
 					if(!nS.isPlaced() && !nS.isLast()) {
 						try{
 							System.out.println("placing horiz at: " + nS + " " + x + " " + y);
-							g.placeShip(nS, x, y, false);
+							playerGrid.placeShip(nS, x, y, false);
 							placed = true;
 							nS.Placed();
 							for(int i = 0; i < nS.getLength(); i++) {
@@ -109,7 +134,7 @@ public class Battleship extends Application {
 						}
 
 					}
-					Ship cS = g.nextShip();
+					Ship cS = playerGrid.nextShip();
 					if(cS.isLast()) {
 						display("All placed", "All Ships have been placed");
 					for(int i = 0; i < 10; i++) {
@@ -123,7 +148,7 @@ public class Battleship extends Application {
 				if(!nS.isPlaced() && !nS.isLast()) {
 					try{
 						System.out.println("placing vert at: " + nS + " " + x + " " + y);
-						g.placeShip(nS, x, y, true);
+						playerGrid.placeShip(nS, x, y, true);
 						placed = true;
 						nS.Placed();
 						for(int i = 0; i < nS.getLength(); i++) {
@@ -136,7 +161,7 @@ public class Battleship extends Application {
 					}
 
 				}
-				Ship cS = g.nextShip();
+				Ship cS = playerGrid.nextShip();
 				if(cS.isLast()) {
 					display("All Placed", "All ships have been placed");
 					for(int i = 0; i < 10; i++) {
@@ -173,7 +198,7 @@ public GridPane getP1() {
 	}
 
 	for (int i = 0; i < 100; i++) {
-		Button button = createButton(Integer.toString(i%10, i/10));
+		Button button = createButton(Integer.toString(i%10, i/10), i%10, i/10);
 		grid1[i%10][i/10] = button;
 		grid.add(button, i % 10, i / 10);
 	}
