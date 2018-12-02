@@ -22,6 +22,10 @@ public class Battleship extends Application {
 	private Grid playerGrid;
 	public Button[][] grid1;
 	public Button[][] grid2;
+	
+	//private Grid playerGrid = new Grid();
+	private Grid aiGrid;
+	private Grid playerView;
 
 	//private Grid playerGrid = new Grid();
 	private Grid aiGrid;
@@ -31,6 +35,7 @@ public class Battleship extends Application {
 	public void start(Stage ps) {
 		grid1 = new Button[10][10];
 		grid2 = new Button[10][10];
+<<<<<<< HEAD
 
 		playerGrid = new Grid();
 		aiGrid = new Grid();
@@ -43,6 +48,14 @@ public class Battleship extends Application {
 			System.out.println();
 		}
 
+=======
+		
+		playerGrid = new Grid();
+		aiGrid = new Grid();
+		
+		aiGrid.randomSet();
+		
+>>>>>>> branch 'master' of https://github.com/RyanSchuller/Battleship.git
 		primaryStage = ps;
 		GridPane g1 = new GridPane();
 		g1 = getP1();
@@ -93,11 +106,19 @@ public class Battleship extends Application {
 						if(aiGrid.allShipsSunk()) {
 							// TODO: End game and print victory message.
 						}
+<<<<<<< HEAD
 						// playerGrid.aiAttack();
 						if(playerGrid.allShipsSunk()) {
 							// TODO: End game and print loss message.
 						}
 
+=======
+						 // playerGrid.aiAttack();
+						if(playerGrid.allShipsSunk()) {
+							// TODO: End game and print loss message.
+						}
+						
+>>>>>>> branch 'master' of https://github.com/RyanSchuller/Battleship.git
 					}
 				}
 			}
@@ -173,7 +194,21 @@ public class Battleship extends Application {
 
 				}
 			}
+<<<<<<< HEAD
+=======
+			else if(btn == MouseButton.SECONDARY){
+				if(!nS.isPlaced() && !nS.isLast()) {
+					try{
+						System.out.println("placing vert at: " + nS + " " + x + " " + y);
+						playerGrid.placeShip(nS, x, y, true);
+						placed = true;
+						nS.Placed();
+						for(int i = 0; i < nS.getLength(); i++) {
+							grid2[x][y+i].setStyle("-fx-background-color: #A9A9A9");
+						}
+>>>>>>> branch 'master' of https://github.com/RyanSchuller/Battleship.git
 
+<<<<<<< HEAD
 		});
 		return button ;
 	}
@@ -194,6 +229,26 @@ public class Battleship extends Application {
 			grid.getColumnConstraints().add(cc);
 			grid.setHgap(1.5); 
 			grid.setVgap(1.5); 
+=======
+					}
+					catch(Exception e) {
+						display("Error", e.getMessage());
+					}
+
+				}
+				Ship cS = playerGrid.nextShip();
+				if(cS.isLast()) {
+					display("All Placed", "All ships have been placed");
+					for(int i = 0; i < 10; i++) {
+						for(int j = 0; j < 10; j++) {
+							grid2[i][j].setOnMouseClicked(e -> System.out.print("pie"));
+						}
+					}
+				}
+
+
+			}
+>>>>>>> branch 'master' of https://github.com/RyanSchuller/Battleship.git
 		}
 
 		for (int i = 0; i < 100; i++) {
@@ -232,9 +287,16 @@ public class Battleship extends Application {
 		return grid;
 	}
 
+<<<<<<< HEAD
 	public static void main(String[] args) {
 		launch(args);
 
+=======
+	for (int i = 0; i < 100; i++) {
+		Button button = createButton(Integer.toString(i%10, i/10), i%10, i/10);
+		grid1[i%10][i/10] = button;
+		grid.add(button, i % 10, i / 10);
+>>>>>>> branch 'master' of https://github.com/RyanSchuller/Battleship.git
 	}
 	public void closeProgram() {
 		Boolean an = ConfirmBox("Close?", "");

@@ -79,8 +79,8 @@ public class Grid {
 	 * It then places the ship onto the grid at that spot.
 	 * 
 	 * @param S - must be an initialized Ship object.
-	 * @param X - must be an int between 1 and 10, inclusive.
-	 * @param Y - must be an int between 1 and 10, inclusive.
+	 * @param X - must be an int between 0 and 9, inclusive.
+	 * @param Y - must be an int between 0 and 9, inclusive.
 	 * @param isVertical - determines if the ship is placed vertically or horizontally at the X,Y coordinate given.
 	 * @throws Exception when ship is trying to be placed off the board
 	 */
@@ -154,13 +154,10 @@ public class Grid {
 
 	public boolean attack(int X, int Y) {
 		boolean hit = false;
-		if(!isEmpty(X,Y)) {
 			if(carrier.isHit(X,Y) || cruiser.isHit(X,Y) || submarine.isHit(X,Y) ||
 					destroyer.isHit(X,Y) || battleship.isHit(X,Y)) {
-				spaces[X][Y] = false;
 				hit = true;
 			}
-		}
 		return hit;
 
 	}

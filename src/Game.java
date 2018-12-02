@@ -17,7 +17,6 @@ public class Game {
 	public void runGame() {
 		Grid playerGrid = new Grid();
 		Grid aiGrid = new Grid();
-		Grid playerView = new Grid();
 		
 		// TODO: Allow users to choose coordinates for ship in the GUI, place the ships using the placeShip method.
 		
