@@ -155,8 +155,6 @@ public class Grid {
 		//example: if a vertical ship is placed in the last row
 	}
 
-
-
 	/**
 	 * Handles a players attempt to hit the opponent's ships.. 
 	 * It uses methods from ship like isHit and isSunk.
