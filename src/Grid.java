@@ -15,8 +15,11 @@ public class Grid {
 	public Ship submarine;
 	public Ship destroyer;
 	private Ship nullship;
+	private ArrayList<int[]> hitCoord;
+	private boolean aiLowerHit;
 	public int lastHitX;
 	public int lastHitY;
+
 
 
 	/**
@@ -31,6 +34,8 @@ public class Grid {
 		battleship = new Ship(4);
 		carrier = new Ship(5);
 		nullship = new Ship(100);
+		hitCoord = new ArrayList<>();
+		aiLowerHit = false;
 
 		//sets each location in the array to false
 		for(int i=0;i<SIDE_LENGTH;i++) {
@@ -41,7 +46,6 @@ public class Grid {
 		}
 
 	}
-	
 	/**
 	 * Checks every ship on the grid to see if they've all been sunk.
 	 * 
@@ -52,7 +56,7 @@ public class Grid {
 				&& cruiser.isSunk() && battleship.isSunk() && carrier.isSunk();
 	}
 
-	 
+	
 	/**
 	 * Randomly places each of the five ships for the given grid.
 	 */
@@ -168,28 +172,239 @@ public class Grid {
 			return hit;
 	}
 	
-	public boolean aiAttack() {
+	public boolean aiAttack() {		
 		
+		int X;
+		int Y;		
 		Random rand = new Random();
 		boolean attacked = false;
 		boolean hit = false;
 		
 		while(!attacked) {
-			int a = rand.nextInt(10);
-			int b = rand.nextInt(10);
-			if(!hitAlready[a][b]) {
-				hit = attack(a,b);
-				lastHitX = a;
-				lastHitY = b;
-				hitAlready[a][b] = true;
-				attacked = true;
+			
+			if(hitCoord.size()==0) {	// If there isn't a known ship nearby.
+				
+				int a = rand.nextInt(10);
+				int b = rand.nextInt(10);
+				if(!hitAlready[a][b]) {
+					hit = attack(a,b);
+					lastHitX = a;
+					lastHitY = b;
+					hitAlready[a][b] = true;
+					int[] coordinates = {a,b};
+					hitCoord.add(coordinates);
+					attacked = true;
+				}
 			}
-		}
+			else if(hitCoord.size()==1) {		//if they just got a successful hit
+				X = hitCoord.get(0)[0];
+				Y = hitCoord.get(0)[1];
+				
+				if(!hitAlready[X+1][Y]) {		//hits to the right of the successful hit
+					hit = attack(X+1,Y);
+					lastHitX = X+1;
+					lastHitY = Y;
+					hitAlready[X+1][Y] = true;
+					int[] coordinates = {X+1,Y};
+					hitCoord.add(coordinates);
+					attacked = true;
+				}
+				else if(!hitAlready[X][Y-1]) {	//hits above the successful hit
+					hit = attack(X,Y-1);
+					lastHitX = X;
+					lastHitY = Y-1;
+					hitAlready[X][Y-1] = true;
+					int[] coordinates = {X,Y-1};
+					hitCoord.add(coordinates);
+					attacked = true;
+				}
+				else if(!hitAlready[X-1][Y]) {	//hits left of the successful hit
+					hit = attack(X-1,Y);
+					lastHitX = X-1;
+					lastHitY = Y;
+					hitAlready[X-1][Y] = true;
+					int[] coordinates = {X-1,Y};
+					hitCoord.add(coordinates);
+					attacked = true;
+				}
+				else if(!hitAlready[X][Y+1]) {	//hits below the successful hit
+					hit = attack(X,Y+1);
+					lastHitX = X;
+					lastHitY = Y+1;
+					hitAlready[X][Y+1] = true;
+					int[] coordinates = {X,Y+1};
+					hitCoord.add(coordinates);
+					attacked = true;
+				}
+			}
+			
+			else if(hitCoord.size()>1) {		// if the user hits the ship multiple times
+				
+				X = hitCoord.get(hitCoord.size()-1)[0];
+				Y = hitCoord.get(hitCoord.size()-1)[1];
+				
+				int lowerX;
+				int lowerY;
+				if(!aiLowerHit) {
+					lowerX = hitCoord.get(0)[0];
+					lowerY = hitCoord.get(0)[1];
+				}
+				else {
+					lowerX = hitCoord.get(hitCoord.size()-1)[0];
+					lowerY = hitCoord.get(hitCoord.size()-1)[1];
+
+				}
+				
+				if(hitCoord.get(0)[0]==hitCoord.get(1)[0]) {	//if the x values are the same
+					
 		
+		//if the second hit is above the first hit
+					if(hitCoord.get(0)[1]<hitCoord.get(1)[1]) {
+						
+						//only for vertical guessing
+						if(!hitAlready[X][Y-1]) {	//checks above the most recent hit
+							hit = attack(X,Y-1);
+							lastHitX = X;
+							lastHitY = Y-1;
+							hitAlready[X][Y-1] = true;
+							int[] coordinates = {X,Y-1};
+							hitCoord.add(coordinates);
+							attacked = true;
+						}
+						
+						else if(!hitAlready[lowerX][lowerY+1]) {	//checks below the original hit
+							hit = attack(lowerX,lowerY+1);
+							lastHitX = lowerX;
+							lastHitY = lowerY+1;
+							hitAlready[lowerX][lowerY+1] = true;
+							int[] coordinates = {lowerX,lowerY+1};
+							if(hit) {
+								lowerX = hitCoord.get(hitCoord.size()-1)[0];
+								lowerY = hitCoord.get(hitCoord.size()-1)[1];
+								aiLowerHit = true;
+							}
+							hitCoord.add(coordinates);
+							attacked = true;
+						}
+						else {
+							for(int[] i:hitCoord) {
+								hitCoord.remove(i);
+							}
+						}
+						
+					}
+
+		//if the second hit is below the first hit				
+					if(hitCoord.get(0)[1]>hitCoord.get(1)[1]) {	
+						
+						//only for vertical guessing
+						if(!hitAlready[X][Y+1]) {	//checks below the most recent hit
+							hit = attack(X,Y+1);
+							lastHitX = X;
+							lastHitY = Y+1;
+							hitAlready[X][Y+1] = true;
+							int[] coordinates = {X,Y+1};
+							hitCoord.add(coordinates);
+							attacked = true;
+						}
+						
+						else if(!hitAlready[lowerX][lowerY-1]) {	//checks above the original hit
+							hit = attack(lowerX,lowerY-1);
+							lastHitX = lowerX;
+							lastHitY = lowerY-1;
+							hitAlready[lowerX][lowerY-1] = true;
+							int[] coordinates = {lowerX,lowerY-1};
+							hitCoord.add(coordinates);
+							if(hit) {
+								lowerX = hitCoord.get(hitCoord.size()-1)[0];
+								lowerY = hitCoord.get(hitCoord.size()-1)[1];
+								aiLowerHit = true;
+							}
+							attacked = true;
+						}
+						else {
+							for(int[] i:hitCoord) {
+								hitCoord.remove(i);
+							}
+						}
+					}
+					
+				}
+				else {		//if it is horizontal
+					
+		//if the second hit is right of the first hit
+					if(hitCoord.get(0)[0]<hitCoord.get(1)[0]) {	
+						
+						//only for horizontal guessing
+						if(!hitAlready[X+1][Y]) {	//checks right of the most recent hit
+							hit = attack(X+1,Y);
+							lastHitX = X+1;
+							lastHitY = Y;
+							hitAlready[X+1][Y] = true;
+							int[] coordinates = {X+1,Y};
+							hitCoord.add(coordinates);
+							attacked = true;
+						}
+						
+						else if(!hitAlready[lowerX-1][lowerY]) {	//checks left of the original hit
+							hit = attack(lowerX-1,lowerY);
+							lastHitX = lowerX-1;
+							lastHitY = lowerY;
+							hitAlready[lowerX-1][lowerY] = true;
+							int[] coordinates = {lowerX-1,lowerY};
+							hitCoord.add(coordinates);
+							if(hit) {
+								lowerX = hitCoord.get(hitCoord.size()-1)[0];
+								lowerY = hitCoord.get(hitCoord.size()-1)[1];
+								aiLowerHit = true;
+							}
+							attacked = true;
+						}
+						else {
+							for(int[] i : hitCoord) {
+								hitCoord.remove(i);
+							}
+						}
+					}
+					
+		//if the second hit is left of the first hit
+					if(hitCoord.get(0)[0]>hitCoord.get(1)[0]) {	
+						
+						//only for horizontal guessing
+						if(!hitAlready[X-1][Y]) {	//checks left of the recent hit
+							hit = attack(X-1,Y);
+							lastHitX = X-1;
+							lastHitY = Y;
+							hitAlready[X-1][Y] = true;
+							int[] coordinates = {X-1,Y};
+							hitCoord.add(coordinates);
+							attacked = true;
+						}
+						
+						else if(!hitAlready[lowerX-1][lowerY]) {	//checks right of the original hit
+							hit = attack(lowerX-1,lowerY);
+							lastHitX = lowerX-1;
+							lastHitY = lowerY;
+							hitAlready[lowerX-1][lowerY] = true;
+							int[] coordinates = {lowerX-1,lowerY};
+							hitCoord.add(coordinates);
+							if(hit) {
+								lowerX = hitCoord.get(hitCoord.size()-1)[0];
+								lowerY = hitCoord.get(hitCoord.size()-1)[1];
+								aiLowerHit = true;
+							}
+							attacked = true;
+						}
+						else {
+							for(int[] i:hitCoord) {
+								hitCoord.remove(i);
+							}
+						}
+					}
+				}
+			}
+		}	
 		return hit;
-		
-		// TODO: If there is a known ship nearby (If one of last 4 hits was successful).
-		
 	}
 
 	/**
