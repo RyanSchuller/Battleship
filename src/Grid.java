@@ -48,11 +48,15 @@ public class Grid {
 				&& cruiser.isSunk() && battleship.isSunk() && carrier.isSunk();
 	}
 
+	
+	/**
+	 * Randomly places each of the five ships for the given grid.
+	 */
 	public void randomSet() {
 		ArrayList<Ship> shipsList = new ArrayList<>();
 		shipsList.add(carrier);
-		shipsList.add(cruiser);
 		shipsList.add(battleship);
+		shipsList.add(cruiser);
 		shipsList.add(submarine);
 		shipsList.add(destroyer);
 		
