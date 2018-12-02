@@ -200,7 +200,7 @@ public class Grid {
 				y = hitCoord.get(0)[0];
 				x = hitCoord.get(0)[1];
 				
-				if(!hitAlready[y+1][x]) {		//hits to the right of the successful hit
+				if(!hitAlready[y+1][x] && y+1<10) {		//hits below the successful hit
 					hit = attack(y+1,x);
 					lastHitX = y+1;
 					lastHitY = x;
@@ -211,7 +211,7 @@ public class Grid {
 					}
 					attacked = true;
 				}
-				else if(!hitAlready[y][x-1]) {	//hits above the successful hit
+				else if(!hitAlready[y][x-1] && x-1>=0) {	//hits left of the successful hit
 					hit = attack(y,x-1);
 					lastHitX = y;
 					lastHitY = x-1;
@@ -222,7 +222,7 @@ public class Grid {
 					}
 					attacked = true;
 				}
-				else if(!hitAlready[y-1][x]) {	//hits left of the successful hit
+				else if(!hitAlready[y-1][x] && y-1>=0) {	//hits above the successful hit
 					hit = attack(y-1,x);
 					lastHitX = y-1;
 					lastHitY = x;
@@ -233,7 +233,7 @@ public class Grid {
 					}
 					attacked = true;
 				}
-				else if(!hitAlready[y][x+1]) {	//hits below the successful hit
+				else if(!hitAlready[y][x+1] && x+1<10) {	//hits right of the successful hit
 					hit = attack(y,x+1);
 					lastHitX = y;
 					lastHitY = x+1;
@@ -251,26 +251,64 @@ public class Grid {
 				y = hitCoord.get(hitCoord.size()-1)[0];
 				x = hitCoord.get(hitCoord.size()-1)[1];
 				
-				int lowerX;
 				int lowerY;
+				int lowerX;
 				if(!aiLowerHit) {
-					lowerX = hitCoord.get(0)[0];
-					lowerY = hitCoord.get(0)[1];
+					lowerY = hitCoord.get(0)[0];
+					lowerX = hitCoord.get(0)[1];
 				}
 				else {
-					lowerX = hitCoord.get(hitCoord.size()-1)[0];
-					lowerY = hitCoord.get(hitCoord.size()-1)[1];
+					lowerY = hitCoord.get(hitCoord.size()-1)[0];
+					lowerX = hitCoord.get(hitCoord.size()-1)[1];
 
 				}
 				
 				if(hitCoord.get(0)[0]==hitCoord.get(1)[0]) {	//if the y values are the same
-					
+																//means horizontal
 		
-		//if the second hit is above the first hit
+		//if the second hit is right of the first hit
 					if(hitCoord.get(0)[1]<hitCoord.get(1)[1]) {
 						
-						//only for vertical guessing
-						if(!hitAlready[y][x-1]) {	//checks above the most recent hit
+						//only for horizontal guessing
+						if(!hitAlready[y][x+1] && x+1<10) {	//checks right the most recent hit
+							hit = attack(y,x+1);
+							lastHitX = y;
+							lastHitY = x+1;
+							hitAlready[y][x+1] = true;
+							if(hit) {
+								int[] coordinates = {y,x-1};
+								hitCoord.add(coordinates);
+							}
+							attacked = true;
+						}
+						
+						else if(!hitAlready[lowerY][lowerX-1] && lowerX-1>=0) {	//checks left of the original hit
+							hit = attack(lowerY,lowerX-1);
+							lastHitX = lowerY;
+							lastHitY = lowerX-1;
+							hitAlready[lowerY][lowerX-1] = true;
+							if(hit) {
+								int[] coordinates = {lowerY,lowerX-1};
+								hitCoord.add(coordinates);
+								lowerY = hitCoord.get(hitCoord.size()-1)[0];
+								lowerX = hitCoord.get(hitCoord.size()-1)[1];
+								aiLowerHit = true;
+							}
+							attacked = true;
+						}
+						else {
+							for(int[] i:hitCoord) {
+								hitCoord= new ArrayList<int[]>();
+							}
+						}
+						
+					}
+
+		//if the second hit is left of the first hit				
+					else if(hitCoord.get(0)[1]>hitCoord.get(1)[1]) {	
+						
+						//only for horizontal guessing
+						if(!hitAlready[y][x-1] && x-1>=0) {	//checks left of the most recent hit
 							hit = attack(y,x-1);
 							lastHitX = y;
 							lastHitY = x-1;
@@ -282,73 +320,34 @@ public class Grid {
 							attacked = true;
 						}
 						
-						else if(!hitAlready[lowerX][lowerY+1]) {	//checks below the original hit
-							hit = attack(lowerX,lowerY+1);
-							lastHitX = lowerX;
-							lastHitY = lowerY+1;
-							hitAlready[lowerX][lowerY+1] = true;
+						else if(!hitAlready[lowerY][lowerX+1] && lowerX+1>=0) {	//checks right of the original hit
+							hit = attack(lowerY,lowerX+1);
+							lastHitX = lowerY;
+							lastHitY = lowerX+1;
+							hitAlready[lowerY][lowerX+1] = true;
 							if(hit) {
-								int[] coordinates = {lowerX,lowerY+1};
+								int[] coordinates = {lowerY,lowerX+1};
 								hitCoord.add(coordinates);
-								lowerX = hitCoord.get(hitCoord.size()-1)[0];
-								lowerY = hitCoord.get(hitCoord.size()-1)[1];
+								lowerY = hitCoord.get(hitCoord.size()-1)[0];
+								lowerX = hitCoord.get(hitCoord.size()-1)[1];
 								aiLowerHit = true;
 							}
 							attacked = true;
-						}
+						}	
 						else {
 							for(int[] i:hitCoord) {
-								hitCoord.remove(i);
-							}
-						}
-						
-					}
-
-		//if the second hit is below the first hit				
-					if(hitCoord.get(0)[1]>hitCoord.get(1)[1]) {	
-						
-						//only for vertical guessing
-						if(!hitAlready[y][x+1]) {	//checks below the most recent hit
-							hit = attack(y,x+1);
-							lastHitX = y;
-							lastHitY = x+1;
-							hitAlready[y][x+1] = true;
-							if(hit) {
-								int[] coordinates = {y,x+1};
-								hitCoord.add(coordinates);
-							}
-							attacked = true;
-						}
-						
-						else if(!hitAlready[lowerX][lowerY-1]) {	//checks above the original hit
-							hit = attack(lowerX,lowerY-1);
-							lastHitX = lowerX;
-							lastHitY = lowerY-1;
-							hitAlready[lowerX][lowerY-1] = true;
-							if(hit) {
-								int[] coordinates = {lowerX,lowerY-1};
-								hitCoord.add(coordinates);
-								lowerX = hitCoord.get(hitCoord.size()-1)[0];
-								lowerY = hitCoord.get(hitCoord.size()-1)[1];
-								aiLowerHit = true;
-							}
-							attacked = true;
-						}
-						else {
-							for(int[] i:hitCoord) {
-								hitCoord.remove(i);
+								hitCoord= new ArrayList<int[]>();
 							}
 						}
 					}
-					
 				}
-				else {		//if it is horizontal
+				else {		//if it is vertical
 					
-		//if the second hit is right of the first hit
+		//if the second hit is below the first hit
 					if(hitCoord.get(0)[0]<hitCoord.get(1)[0]) {	
 						
-						//only for horizontal guessing
-						if(!hitAlready[y+1][x]) {	//checks right of the most recent hit
+						//only for vertical guessing
+						if(!hitAlready[y+1][x] && y+1<10) {	//checks below the most recent hit
 							hit = attack(y+1,x);
 							lastHitX = y+1;
 							lastHitY = x;
@@ -360,32 +359,32 @@ public class Grid {
 							attacked = true;
 						}
 						
-						else if(!hitAlready[lowerX-1][lowerY]) {	//checks left of the original hit
-							hit = attack(lowerX-1,lowerY);
-							lastHitX = lowerX-1;
-							lastHitY = lowerY;
-							hitAlready[lowerX-1][lowerY] = true;
+						else if(!hitAlready[lowerY-1][lowerX] && lowerY-1>=0) {	//checks above the original hit
+							hit = attack(lowerY-1,lowerX);
+							lastHitX = lowerY-1;
+							lastHitY = lowerX;
+							hitAlready[lowerY-1][lowerX] = true;
 							if(hit) {
-								int[] coordinates = {lowerX-1,lowerY};
+								int[] coordinates = {lowerY-1,lowerX};
 								hitCoord.add(coordinates);
-								lowerX = hitCoord.get(hitCoord.size()-1)[0];
-								lowerY = hitCoord.get(hitCoord.size()-1)[1];
+								lowerY = hitCoord.get(hitCoord.size()-1)[0];
+								lowerX = hitCoord.get(hitCoord.size()-1)[1];
 								aiLowerHit = true;
 							}
 							attacked = true;
 						}
 						else {
 							for(int[] i : hitCoord) {
-								hitCoord.remove(i);
+								hitCoord= new ArrayList<int[]>();
 							}
 						}
 					}
 					
-		//if the second hit is left of the first hit
-					if(hitCoord.get(0)[0]>hitCoord.get(1)[0]) {	
+		//if the second hit is above the first hit
+					else if(hitCoord.get(0)[0]>hitCoord.get(1)[0]) {	
 						
-						//only for horizontal guessing
-						if(!hitAlready[y-1][x]) {	//checks left of the recent hit
+						//only for vertical guessing
+						if(!hitAlready[y-1][x] && y-1>=0) {	//checks above the recent hit
 							hit = attack(y-1,x);
 							lastHitX = y-1;
 							lastHitY = x;
@@ -397,23 +396,23 @@ public class Grid {
 							attacked = true;
 						}
 						
-						else if(!hitAlready[lowerX-1][lowerY]) {	//checks right of the original hit
-							hit = attack(lowerX-1,lowerY);
-							lastHitX = lowerX-1;
-							lastHitY = lowerY;
-							hitAlready[lowerX-1][lowerY] = true;
+						else if(!hitAlready[lowerY-1][lowerX] && lowerY-1>=0) {	//checks below the original hit
+							hit = attack(lowerY-1,lowerX);
+							lastHitX = lowerY-1;
+							lastHitY = lowerX;
+							hitAlready[lowerY-1][lowerX] = true;
 							if(hit) {
-								int[] coordinates = {lowerX-1,lowerY};
+								int[] coordinates = {lowerY-1,lowerX};
 								hitCoord.add(coordinates);
-								lowerX = hitCoord.get(hitCoord.size()-1)[0];
-								lowerY = hitCoord.get(hitCoord.size()-1)[1];
+								lowerY = hitCoord.get(hitCoord.size()-1)[0];
+								lowerX = hitCoord.get(hitCoord.size()-1)[1];
 								aiLowerHit = true;
 							}
 							attacked = true;
-						}
+						}	
 						else {
 							for(int[] i:hitCoord) {
-								hitCoord.remove(i);
+								hitCoord= new ArrayList<int[]>();
 							}
 						}
 					}
