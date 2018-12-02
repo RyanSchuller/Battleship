@@ -15,6 +15,8 @@ public class Grid {
 	public Ship submarine;
 	public Ship destroyer;
 	private Ship nullship;
+	public int lastHitX;
+	public int lastHitY;
 
 
 	/**
@@ -39,6 +41,7 @@ public class Grid {
 		}
 
 	}
+	
 	/**
 	 * Checks every ship on the grid to see if they've all been sunk.
 	 * 
@@ -49,7 +52,7 @@ public class Grid {
 				&& cruiser.isSunk() && battleship.isSunk() && carrier.isSunk();
 	}
 
-	
+	 
 	/**
 	 * Randomly places each of the five ships for the given grid.
 	 */
@@ -165,22 +168,25 @@ public class Grid {
 			return hit;
 	}
 	
-	public void aiAttack() {
+	public boolean aiAttack() {
 		
 		Random rand = new Random();
 		boolean attacked = false;
-		
-		// If there isn't a known ship nearby.
+		boolean hit = false;
 		
 		while(!attacked) {
 			int a = rand.nextInt(10);
 			int b = rand.nextInt(10);
 			if(!hitAlready[a][b]) {
-				attack(a,b);
+				hit = attack(a,b);
+				lastHitX = a;
+				lastHitY = b;
 				hitAlready[a][b] = true;
 				attacked = true;
 			}
 		}
+		
+		return hit;
 		
 		// TODO: If there is a known ship nearby (If one of last 4 hits was successful).
 		
