@@ -1,7 +1,7 @@
 /**
  * 
  * This class is responsible for storing the information about the ship 
- *
+ * 
  */
 public class Ship {
 

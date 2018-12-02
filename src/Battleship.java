@@ -168,6 +168,7 @@ public class Battleship extends Application {
 					Ship cS = playerGrid.nextShip();
 					if(cS.isLast()) {
 						display("All Placed", "All ships have been placed");
+						placedShips = true;
 						for(int i = 0; i < 10; i++) {
 							for(int j = 0; j < 10; j++) {
 								grid2[i][j].setOnMouseClicked(e -> System.out.print("pie"));
