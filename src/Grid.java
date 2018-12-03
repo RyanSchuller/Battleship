@@ -164,10 +164,10 @@ public class Grid {
 
 		// These if statements check to see if the edge of the ship would be off the board
 		if(isVert && x+size>=10) {
-			throw new Exception("The ship does not fit on the board at this location (off the bottom of the board) + size");
+			throw new Exception("The ship does not fit on the board at this location (off the bottom of the board)");
 		}
 		if(!isVert && y+size>=10) {
-			throw new Exception("The ship does not fit on the board at this location (off the right side of the board)" + size);
+			throw new Exception("The ship does not fit on the board at this location (off the right side of the board)");
 		}
 		
 		// The following section checks for potential overlap between ships when placing. 
@@ -229,8 +229,8 @@ public class Grid {
 					destroyer.isHit(y,x) || battleship.isHit(y,x)) {
 				hit = true;
 			}
-			hitAlready[y][x] = true;
-			return hit;
+			hitAlready[y][x] = true;	//updates the array of locations that have been hit
+			return hit;	//returns if the attack hit any ship
 	}
 		
 	/** 
@@ -241,134 +241,161 @@ public class Grid {
 	 */
 	public boolean aiAttack() {		
 		
-		int y;
-		int x;		
-		Random rand = new Random();
-		boolean attacked = false;
-		boolean hit = false;
+		int y;	//a y coordinate for the ai's attack
+		int x;	//an x coordinate for the ai's attack
+		Random rand = new Random();	//random used for a randomized attack
+		boolean attacked = false;	//if the ai ended up attacking or not
+		boolean hit = false;		//if the attack resulted in a hit ship
 		
-		while(!attacked) {
+		while(!attacked) {		//while the ai has not attacked on his turn
 			
 			if(hitCoord.size()==0) {	// If there isn't a known ship nearby.
 				
+				//creates an attack at a random x and y coordinate between 0 and 9
 				int a = rand.nextInt(10);
 				int b = rand.nextInt(10);
-				if(!hitAlready[a][b]) { 
-					hit = attack(a,b);
+				
+				if(!hitAlready[a][b]) { 	//if the location that was randomly generated has not already been attacked
+					hit = attack(a,b);	//attacks at the randomized location using the attack method
+					//adds the newly hit location to the list of hit locations
 					lastHitX = a;
 					lastHitY = b;
 					hitAlready[a][b] = true;
+					
+					//if the attack was successful it adds the coordinates of the successful hit to an arraylist
 					if(hit) {
 						int[] coordinates = {a,b};
 						hitCoord.add(coordinates);
 					}
-					attacked = true;
+					attacked = true;	//attacked is set to true to end the loop since the ai was able to attack
 				}
 			}
 			else if(hitCoord.size()==1) {		//if they just got a successful hit
+				//uses the coordinates from the successful hit
 				y = hitCoord.get(0)[0];
 				x = hitCoord.get(0)[1];
 				
-				if(y+1<10 && !hitAlready[y+1][x]) {		//hits below the successful hit
-					hit = attack(y+1,x);
+				//hits below the successful hit
+				if(y+1<10 && !hitAlready[y+1][x]) {		//if the hit will be on the board and has not been hit yet
+					hit = attack(y+1,x);		//attacks the location below the successful hit
 					lastHitX = y+1;
 					lastHitY = x;
-					hitAlready[y+1][x] = true;
+					hitAlready[y+1][x] = true;	//adds the coordinates to the list of hit locations
 					if(hit) {
-						int[] coordinates = {y+1,x};
-						hitCoord.add(coordinates);
+						int[] coordinates = {y+1,x};	
+						hitCoord.add(coordinates);	//if it was a successful hit, adds the coordinates to the arraylist of hit ships' locations
 					}
-					attacked = true;
+					attacked = true;	//attacked is set to true to end the loop since the ai was able to attack
 				}
-				else if(x-1>=0 && !hitAlready[y][x-1]) {	//hits left of the successful hit
-					hit = attack(y,x-1);
+				
+				//hits left of the successful hit
+				else if(x-1>=0 && !hitAlready[y][x-1]) {	//if the hit will be on the board and has not been hit yet
+					hit = attack(y,x-1);		//attacks the location left of the successful hit
 					lastHitX = y;
 					lastHitY = x-1;
-					hitAlready[y][x-1] = true;
+					hitAlready[y][x-1] = true;	//adds the coordinates to the list of hit locations
 					if(hit) {
 						int[] coordinates = {y,x-1};
-						hitCoord.add(coordinates);
+						hitCoord.add(coordinates);	//if it was a successful hit, adds the coordinates to the arraylist of hit ships' locations
 					}
-					attacked = true;
+					attacked = true;	//attacked is set to true to end the loop since the ai was able to attack
 				}
-				else if(y-1>=0 && !hitAlready[y-1][x]) {	//hits above the successful hit
-					hit = attack(y-1,x);
+				
+				//hits above the successful hit
+				else if(y-1>=0 && !hitAlready[y-1][x]) {	//if the hit will be on the board and has not been hit yet
+					hit = attack(y-1,x);		//attacks the location above the successful hit
 					lastHitX = y-1;
 					lastHitY = x;
-					hitAlready[y-1][x] = true;
+					hitAlready[y-1][x] = true;	//adds the coordinates to the list of hit locations
 					if(hit) {
 						int[] coordinates = {y-1,x};
-						hitCoord.add(coordinates);
+						hitCoord.add(coordinates);	//if it was a successful hit, adds the coordinates to the arraylist of hit ships' locations
 					}
-					attacked = true;
+					attacked = true;	//attacked is set to true to end the loop since the ai was able to attack
 				}
-				else if(x+1<10 && !hitAlready[y][x+1]) {	//hits right of the successful hit
-					hit = attack(y,x+1);
+				
+				//hits right of the successful hit
+				else if(x+1<10 && !hitAlready[y][x+1]) {	//if the hit will be on the board and has not been hit yet
+					hit = attack(y,x+1);		//attacks the location right of the successful hit
 					lastHitX = y;
 					lastHitY = x+1;
-					hitAlready[y][x+1] = true;
+					hitAlready[y][x+1] = true;	//adds the coordinates to the list of hit locations
 					if(hit) {
 						int[] coordinates = {y,x+1};
-						hitCoord.add(coordinates);
+						hitCoord.add(coordinates);	//if it was a successful hit, adds the coordinates to the arraylist of hit ships' locations
 					}
-					attacked = true;
+					attacked = true;	//attacked is set to true to end the loop since the ai was able to attack
 				}
-				else {
-					hitCoord= new ArrayList<int[]>();
+				else {	//if there was no hit in any of the 4 locations around the successful hit
+					hitCoord= new ArrayList<int[]>();	//makes the arraylist of hits a new arraylist to clear any hits
+					//the ai will then go back to random guessing
 				}
 			}
 			
 			else if(hitCoord.size()>1) {		// if the user hits the ship multiple times
 				
+				//sets the x and y coordinates equal to the most recent successful hit
 				y = hitCoord.get(hitCoord.size()-1)[0];
 				x = hitCoord.get(hitCoord.size()-1)[1];
 				
-				int lowerY;
+				//used initially as the original hit, but changed to the newest hit if the ai switches 
+				//directions for which way it is attacking a ship (if it guesses in the middle of a 
+				//ship and needs to check both sides)
+				int lowerY;	
 				int lowerX;
-				if(!aiLowerHit) {
+				
+				if(!aiLowerHit) {		//if the ai has not hit another spot since switching directions yet
+					//the lower values are set to the original hit
 					lowerY = hitCoord.get(0)[0];
 					lowerX = hitCoord.get(0)[1];
 				}
-				else {
+				else {	//if the ai has hit a spot successfully after switching directions
+					//the lower coordinates are updated to be the most recent hit and the ai begins
+					//to attack more in the new direction
 					lowerY = hitCoord.get(hitCoord.size()-1)[0];
 					lowerX = hitCoord.get(hitCoord.size()-1)[1];
 
 				}
 				
 				if(hitCoord.get(0)[0]==hitCoord.get(1)[0]) {	//if the y values are the same
-																//means horizontal
+																//(horizontal)
 		
 		//if the second hit is right of the first hit
 					if(hitCoord.get(0)[1]<hitCoord.get(1)[1]) {
-						
 						//only for horizontal guessing
-						if(x+1<10 && !hitAlready[y][x+1]) {	//checks right of the most recent hit
-							hit = attack(y,x+1);
+						
+						//checks right of the most recent hit
+						if(x+1<10 && !hitAlready[y][x+1]) {	//if the next guess is on the board and has not been attacked yet
+							hit = attack(y,x+1);		//it attacks the next location
 							lastHitX = y;
 							lastHitY = x+1;
-							hitAlready[y][x+1] = true;
+							hitAlready[y][x+1] = true;	//updates the list of attacked locations
 							if(hit) {
 								int[] coordinates = {y,x+1};
-								hitCoord.add(coordinates);
+								hitCoord.add(coordinates);		//if the attack was successful, it adds the coordinates of the hits to the arraylist
 							}
-							attacked = true;
+							attacked = true;  //attacked is set to true to end the loop since the ai was able to attack
 						}
 						
-						else if(lowerX-1>=0 && !hitAlready[lowerY][lowerX-1]) {	//checks left of the original hit
-							hit = attack(lowerY,lowerX-1);
+						//checks left of the original hit (or the previous hit if the ai has already switched directions
+						else if(lowerX-1>=0 && !hitAlready[lowerY][lowerX-1]) {	//if the next guess is on the board and has not been attacked yet
+							hit = attack(lowerY,lowerX-1);		//it attacks the next location
 							lastHitX = lowerY;
 							lastHitY = lowerX-1;
-							hitAlready[lowerY][lowerX-1] = true;
+							hitAlready[lowerY][lowerX-1] = true;	//updates the list of attacked locations
 							if(hit) {
 								int[] coordinates = {lowerY,lowerX-1};
-								hitCoord.add(coordinates);
+								hitCoord.add(coordinates);	//if the attack was successful, it adds the coordinates of the hits to the arraylist
 								lowerY = hitCoord.get(hitCoord.size()-1)[0];
-								lowerX = hitCoord.get(hitCoord.size()-1)[1];
-								aiLowerHit = true;
+								lowerX = hitCoord.get(hitCoord.size()-1)[1];	//changes the lower coordinates to the most recent successful hit
+								aiLowerHit = true;	//makes it so that the lower coordinates will not be set to the original coordinates every time it enters the loop
 							}
-							attacked = true;
+							attacked = true;	//attacked is set to true to end the loop since the ai was able to attack
 						}
+						
+						//if the ai doesn't get any more successful hits
 						else {
+							// the arraylist of successful hits will set to a new arraylist causing the ai to go back to random guessing
 							hitCoord= new ArrayList<int[]>();
 						}
 						
@@ -376,35 +403,39 @@ public class Grid {
 
 		//if the second hit is left of the first hit				
 					else if(hitCoord.get(0)[1]>hitCoord.get(1)[1]) {	
-						
 						//only for horizontal guessing
-						if(x-1>=0 && !hitAlready[y][x-1]) {	//checks left of the most recent hit
-							hit = attack(y,x-1);
+						
+						//checks left of the most recent hit
+						if(x-1>=0 && !hitAlready[y][x-1]) {	//if the next attack is still on the board and it hasnt been attacked yet
+							hit = attack(y,x-1);		//attacks at this new location
 							lastHitX = y;
 							lastHitY = x-1;
-							hitAlready[y][x-1] = true;
+							hitAlready[y][x-1] = true;		//updates the array storing all attacked locations
 							if(hit) {
 								int[] coordinates = {y,x-1};
-								hitCoord.add(coordinates);
+								hitCoord.add(coordinates);	//adds the successful hit to the arraylist if there was one
 							}
-							attacked = true;
+							attacked = true;	//attacked is set to true to end the loop since the ai was able to attack
 						}
 						
-						else if(lowerX+1<10 && !hitAlready[lowerY][lowerX+1]) {	//checks right of the original hit
-							hit = attack(lowerY,lowerX+1);
+						//checks right of the original hit
+						else if(lowerX+1<10 && !hitAlready[lowerY][lowerX+1]) {	//if the next attack is still on the board and it hasnt been attacked yet
+							hit = attack(lowerY,lowerX+1);		//attacks at that location
 							lastHitX = lowerY;
 							lastHitY = lowerX+1;
-							hitAlready[lowerY][lowerX+1] = true;
+							hitAlready[lowerY][lowerX+1] = true;		//updates the array of all attacked locations
 							if(hit) {
 								int[] coordinates = {lowerY,lowerX+1};
-								hitCoord.add(coordinates);
+								hitCoord.add(coordinates);	//adds the successful hit to the arraylist if there was one
 								lowerY = hitCoord.get(hitCoord.size()-1)[0];
-								lowerX = hitCoord.get(hitCoord.size()-1)[1];
-								aiLowerHit = true;
+								lowerX = hitCoord.get(hitCoord.size()-1)[1];	//updates the lower coordinates to the most recent hit if it was successful
+								aiLowerHit = true;	//now the lower coordinates will not be set to the original coordinates every time it enters the loop
 							}
-							attacked = true;
+							attacked = true;	//attacked is set to true to end the loop since the ai was able to attack
 						}	
+						//if the ai doesn't get any more successful hits
 						else {
+							// the arraylist of successful hits will set to a new arraylist causing the ai to go back to random guessing
 							hitCoord= new ArrayList<int[]>();
 						}
 					}
@@ -413,77 +444,85 @@ public class Grid {
 					
 		//if the second hit is below the first hit
 					if(hitCoord.get(0)[0]<hitCoord.get(1)[0]) {	
-						
 						//only for vertical guessing
-						if(y+1<10 && !hitAlready[y+1][x]) {	//checks below the most recent hit
-							hit = attack(y+1,x);
+						
+						//checks below the most recent hit if its on the board and hasnt been attacked yet
+						if(y+1<10 && !hitAlready[y+1][x]) {	
+							hit = attack(y+1,x);	//attacks at new locations
 							lastHitX = y+1;
 							lastHitY = x;
-							hitAlready[y+1][x] = true;
+							hitAlready[y+1][x] = true;	//updates array of attacks
 							if(hit) {
 								int[] coordinates = {y+1,x};
-								hitCoord.add(coordinates); 
+								hitCoord.add(coordinates); //updates arraylist of successful attacks if necessary
 							}
-							attacked = true;
+							attacked = true;	//updates boolean attacked to switch turns
 						}
 						
-						else if(lowerY-1>=0 && !hitAlready[lowerY-1][lowerX]) {	//checks above the original hit
-							hit = attack(lowerY-1,lowerX);
+						//checks above the original hit if its in bounds and hasnt been hit yet
+						else if(lowerY-1>=0 && !hitAlready[lowerY-1][lowerX]) {	
+							hit = attack(lowerY-1,lowerX);	//attacks at new location
 							lastHitX = lowerY-1;
 							lastHitY = lowerX;
-							hitAlready[lowerY-1][lowerX] = true;
+							hitAlready[lowerY-1][lowerX] = true;	//updates array of attacks
 							if(hit) {
 								int[] coordinates = {lowerY-1,lowerX};
-								hitCoord.add(coordinates);
+								hitCoord.add(coordinates);	//updates arraylist of successes if the attack was successful
 								lowerY = hitCoord.get(hitCoord.size()-1)[0];
 								lowerX = hitCoord.get(hitCoord.size()-1)[1];
-								aiLowerHit = true;
+								aiLowerHit = true;//updates this boolean to prevent the lower coordinates from always being the original hit
 							}
-							attacked = true;
+							attacked = true;	//updates this boolean to indicate the ai's turn is over
 						}
+						//if the ai doesn't get any more successful hits
 						else {
+							// the arraylist of successful hits will set to a new arraylist causing the ai to go back to random guessing
 							hitCoord= new ArrayList<int[]>();
 						}
 					}
 					
 		//if the second hit is above the first hit
 					else if(hitCoord.get(0)[0]>hitCoord.get(1)[0]) {	
-						
 						//only for vertical guessing
-						if(y-1>=0 && !hitAlready[y-1][x]) {	//checks above the recent hit
-							hit = attack(y-1,x);
+						
+						//checks above the recent hit if its on the board and hasnt been attacked yet
+						if(y-1>=0 && !hitAlready[y-1][x]) {	
+							hit = attack(y-1,x);	//attacks at this location
 							lastHitX = y-1;
 							lastHitY = x;
-							hitAlready[y-1][x] = true;
+							hitAlready[y-1][x] = true;	//updates array storing all attacks to have this attacked location
 							if(hit) {
 								int[] coordinates = {y-1,x};
-								hitCoord.add(coordinates);
+								hitCoord.add(coordinates);	//if the attack was a success it updates the arraylist
 							}
-							attacked = true;
+							attacked = true;	//updates the boolean to indicate its the player's turn
 						}
 						
-						else if(lowerY-1>=0 && !hitAlready[lowerY-1][lowerX]) {	//checks below the original hit
-							hit = attack(lowerY-1,lowerX);
+						//checks below the original hit if that location is on the board and has yet to be attacked
+						else if(lowerY-1>=0 && !hitAlready[lowerY-1][lowerX]) {	
+							hit = attack(lowerY-1,lowerX);	//attacks this location
 							lastHitX = lowerY-1;
 							lastHitY = lowerX;
-							hitAlready[lowerY-1][lowerX] = true;
+							hitAlready[lowerY-1][lowerX] = true;	//adds this location to the list of attacked locations
 							if(hit) {
 								int[] coordinates = {lowerY-1,lowerX};
-								hitCoord.add(coordinates);
+								hitCoord.add(coordinates);	//adds the coordinates of the attack to the arraylist if the attack was successful
 								lowerY = hitCoord.get(hitCoord.size()-1)[0];
 								lowerX = hitCoord.get(hitCoord.size()-1)[1];
-								aiLowerHit = true;
+								aiLowerHit = true;	//changes the boolean to true to prevent the coordinates from being at the original hit location again
 							}
-							attacked = true;
+							attacked = true;	//updates the boolean to indicate the ai's turn is over
 						}	
-						else { 
+						//if the ai doesn't get any more successful hits
+						else {
+							// the arraylist of successful hits will set to a new arraylist causing the ai to go back to random guessing
 							hitCoord= new ArrayList<int[]>();
 						}
 					}
 				}
 			}
 		}	
-		return hit;
+		return hit;	//returns if the attack was successful or not
 	}
 
 	/**
