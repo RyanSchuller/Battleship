@@ -95,10 +95,10 @@ public class Battleship extends Application {
 								}
 							}
 							if(playerGrid.aiAttack()) {
-								grid2[playerGrid.lastHitY][playerGrid.lastHitX].setStyle("-fx-background-color: #FF0000");
+								grid2[playerGrid.getLastHitY()][playerGrid.getLastHitX()].setStyle("-fx-background-color: #FF0000");
 							}
 							else {
-								grid2[playerGrid.lastHitY][playerGrid.lastHitX].setStyle("-fx-background-color: #FFFFFF");
+								grid2[playerGrid.getLastHitY()][playerGrid.getLastHitX()].setStyle("-fx-background-color: #FFFFFF");
 							}
 
 							if(playerGrid.allShipsSunk()) {
