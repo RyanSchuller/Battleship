@@ -321,7 +321,7 @@ public class Grid {
 							attacked = true;
 						}
 						
-						else if(lowerX+1>=0 && !hitAlready[lowerY][lowerX+1]) {	//checks right of the original hit
+						else if(lowerX+1<10 && !hitAlready[lowerY][lowerX+1]) {	//checks right of the original hit
 							hit = attack(lowerY,lowerX+1);
 							lastHitX = lowerY;
 							lastHitY = lowerX+1;
