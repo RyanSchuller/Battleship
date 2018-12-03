@@ -496,10 +496,10 @@ public class Grid {
 	 * @author DrayDr
 	 */
 	public boolean isEmpty(int y, int x) {
-		if(spaces[y][x]==true) {
-			return false;
+		if(spaces[y][x]) {		//if the location from the parameters in the array is true
+			return false;		//if  it is true then the spot is not empty (it has a ship)
 		}
-		return true;
+		return true;		//otherwise it is empty (there's no ship at the location)
 	}
 
 	/**
