@@ -170,6 +170,7 @@ public class Grid {
 			return hit;
 	}
 	
+	
 	public boolean aiAttack() {		
 		
 		int y;
