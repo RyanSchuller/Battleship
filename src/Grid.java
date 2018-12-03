@@ -184,7 +184,7 @@ public class Grid {
 				
 				int a = rand.nextInt(10);
 				int b = rand.nextInt(10);
-				if(!hitAlready[a][b]) {
+				if(!hitAlready[a][b]) { 
 					hit = attack(a,b);
 					lastHitX = a;
 					lastHitY = b;
