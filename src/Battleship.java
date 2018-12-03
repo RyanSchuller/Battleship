@@ -92,13 +92,13 @@ public class Battleship extends Application {
 							display("Already Hit", "This tile has already been hit, please select again");
 						}//does nothing if they already attacked the tile.
 						else {
-							if(aiGrid.attack(x, y)) {
-								button.setStyle("-fx-background-color: #FF0000");
+							if(aiGrid.attack(x, y)) {//if its a hit.
+								button.setStyle("-fx-background-color: #FF0000");//changes color.
 							}
-							else {
+							else {//if its a miss.
 								button.setStyle("-fx-background-color: #FFFFFF");
 							}
-							if(aiGrid.allShipsSunk()) {
+							if(aiGrid.allShipsSunk()) {//checks if the player won
 								gameOver = true;
 								display("Victory", "You sank all their ships");
 
