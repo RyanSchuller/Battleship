@@ -85,7 +85,14 @@ public class Battleship extends Application {
 								button.setStyle("-fx-background-color: #FFFFFF");
 							}
 							if(aiGrid.allShipsSunk()) {
-								// TODO: End game and print victory message.
+								boolean vBox = ConfirmBox("Victory", "Do you want to play again?");
+								if(vBox) {
+									primaryStage.close();
+								}
+								else {
+									primaryStage.close();
+
+								}
 							}
 							if(playerGrid.aiAttack()) {
 								grid2[playerGrid.lastHitY][playerGrid.lastHitX].setStyle("-fx-background-color: #FF0000");
@@ -95,7 +102,14 @@ public class Battleship extends Application {
 							}
 
 							if(playerGrid.allShipsSunk()) {
-								// TODO: End game and print loss message.
+								boolean dBox = ConfirmBox("Defeat", "Do you want to play again?");
+								if(dBox) {
+									primaryStage.close();
+								}
+								else {
+									primaryStage.close();
+								}
+
 							}
 
 						}
@@ -123,7 +137,6 @@ public class Battleship extends Application {
 				if(btn==MouseButton.PRIMARY){
 					if(!nS.isPlaced() && !nS.isLast()) {
 						try {
-							System.out.println("placing horiz at: " + nS + " " + x + " " + y);
 							playerGrid.placeShip(nS, x, y, false);
 							placed = true;
 							nS.Placed();
@@ -139,7 +152,6 @@ public class Battleship extends Application {
 					}
 					Ship cS = playerGrid.nextShip();
 					if(cS.isLast()) {
-						display("All placed", "All Ships have been placed");
 						placedShips = true;
 						for(int i = 0; i < 10; i++) {
 							for(int j = 0; j < 10; j++) {
