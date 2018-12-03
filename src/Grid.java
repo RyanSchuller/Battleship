@@ -407,7 +407,7 @@ public class Grid {
 							}
 							attacked = true;
 						}	
-						else {
+						else { 
 							hitCoord= new ArrayList<int[]>();
 						}
 					}
