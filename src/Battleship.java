@@ -122,7 +122,7 @@ public class Battleship extends Application {
 				MouseButton btn = event.getButton();
 				if(btn==MouseButton.PRIMARY){
 					if(!nS.isPlaced() && !nS.isLast()) {
-						try{
+						try {
 							System.out.println("placing horiz at: " + nS + " " + x + " " + y);
 							playerGrid.placeShip(nS, x, y, false);
 							placed = true;
