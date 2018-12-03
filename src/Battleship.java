@@ -16,66 +16,81 @@ import javafx.stage.Stage;
  * Top level class responsible for running the battleship game through the Game class..
  */
 public class Battleship extends Application {
-	private Stage primaryStage;
+	private static Stage primaryStage;
 	private boolean answ;
 	private Grid playerGrid;
 	private Grid aiGrid;
 	public Button[][] grid1;
 	public Button[][] grid2;
 	private boolean placedShips = false;
+	private static boolean gameOver = false;
+	private int numPlayerAtt;
+	private int numAiAtt;
 
-
+	/**
+	 * sets up the GUI
+	 */
 	@Override
 	public void start(Stage ps) {
-		grid1 = new Button[10][10];
-		grid2 = new Button[10][10];
+		grid1 = new Button[10][10];//The grid of buttons for where the player attacks.
+		grid2 = new Button[10][10];//grid of buttons for the players board.
 
-		playerGrid = new Grid();
-		aiGrid = new Grid();
+		playerGrid = new Grid();//players ships
+		aiGrid = new Grid();//ai's ships
 
-		aiGrid.randomSet();
+		aiGrid.randomSet();//placed ai's ships
 
-		primaryStage = ps;
-		GridPane g1 = new GridPane();
-		g1 = getP1();
+		primaryStage = ps;//assigns the primary stage from the one taken in by start
+		GridPane g1 = new GridPane();//creates the grid panes.
+		g1 = getP1();//sets the gridpanes using their respective methods.
 		GridPane g2 = new GridPane();
 		g2 = getP2();
 
 
 		Label l = new Label("Left click to place Horizontally to the Right, Right click \n to place vertically down \n places ships in order from largest to smallest.");
-		l.setTextFill(Color.WHITE);
+		l.setTextFill(Color.WHITE);//creates text for the GUI
 		Label atB = new Label("Attack Board");
 		atB.setTextFill(Color.WHITE);
 		Label ownB = new Label("Your Own Board");
 		ownB.setTextFill(Color.WHITE);
-		VBox  v = new VBox(atB, g1, l,  ownB, g2);
-		v.setPadding(new Insets(10, 20, 10, 20));
-		v.backgroundProperty().set(new Background(new BackgroundFill(Color.NAVY, CornerRadii.EMPTY, Insets.EMPTY)));
-		v.setMinSize(350, 620);
+		VBox  v = new VBox(atB, g1, l,  ownB, g2);//initialize the Vbox for the scene.
+		v.setPadding(new Insets(10, 20, 10, 20));//sets spacing around the VBox
+		v.backgroundProperty().set(new Background(new BackgroundFill(Color.NAVY, CornerRadii.EMPTY, Insets.EMPTY)));//sets background color
+		v.setMinSize(350, 620);//set default window sizes.
 		v.setMaxSize(350, 620);
-		Scene scene = new Scene(v);
-		primaryStage.setScene(scene);
-		primaryStage.show();
-		primaryStage.setOnCloseRequest(e -> {
-			e.consume();
-			closeProgram();
+		Scene scene = new Scene(v);//sets the vbox to the scene.
+		primaryStage.setScene(scene);//sets the scene to the stage.
+		primaryStage.show();//displays the stage.
+		primaryStage.setOnCloseRequest(e -> {//this intercepts close program requests to ask the user if they are sure.
+			e.consume();//this line is to point out the fact that it is called consume.
+			closeProgram();//runs closeProgram method
 		});
 	}
 
+	/**
+	 * creates the buttons for attacking.
+	 * @param text the name of button, should be coordinates.
+	 * @param x x coordinate
+	 * @param y y coordinate
+	 * @return a button with inputs and attack functionality.
+	 */
 	private Button createButton(String text, int x, int y) {
-		Button button = new Button("");
-		button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		button.setStyle("-fx-background-color: #0080ff");
-		button.setOnMouseClicked(new EventHandler<MouseEvent>() {
+		Button button = new Button("");//creates the button
+		button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);//sets window size
+		button.setStyle("-fx-background-color: #0080ff");//default color
+		button.setOnMouseClicked(new EventHandler<MouseEvent>() {//button functionality.
 
+			/**
+			 * sets what the buttons do, which is attack.
+			 */
 			@Override
 			public void handle(MouseEvent event) {
-				if(placedShips) {
-					MouseButton btn = event.getButton();
+				if(placedShips) {//*if all ships are placed
+					MouseButton btn = event.getButton();//gets what type of click it was.
 					if(btn==MouseButton.PRIMARY){
 						if(button.getStyle() == "-fx-background-color: #FFFFFF" || button.getStyle() == "-fx-background-color: #FF0000") {
 							display("Already Hit", "This tile has already been hit, please select again");
-						}
+						}//does nothing if they already attacked the tile.
 						else {
 							if(aiGrid.attack(x, y)) {
 								button.setStyle("-fx-background-color: #FF0000");
@@ -84,15 +99,13 @@ public class Battleship extends Application {
 								button.setStyle("-fx-background-color: #FFFFFF");
 							}
 							if(aiGrid.allShipsSunk()) {
-								boolean vBox = ConfirmBox("Victory", "Do you want to play again?");
-								if(vBox) {
-									primaryStage.close();
-								}
-								else {
-									primaryStage.close();
+								gameOver = true;
+								display("Victory", "You sank all their ships");
 
-								}
 							}
+							numPlayerAtt++;
+						}
+						if(numPlayerAtt > numAiAtt) {
 							if(playerGrid.aiAttack()) {
 								grid2[playerGrid.getLastHitY()][playerGrid.getLastHitX()].setStyle("-fx-background-color: #FF0000");
 							}
@@ -101,16 +114,11 @@ public class Battleship extends Application {
 							}
 
 							if(playerGrid.allShipsSunk()) {
-								boolean dBox = ConfirmBox("Defeat", "Do you want to play again?");
-								if(dBox) {
-									primaryStage.close();
-								}
-								else {
-									primaryStage.close();
-								}
+								gameOver = true;
+								display("Defeat", "Do you want to play again?");
 
-							}
-
+							}	
+							numAiAtt++;
 						}
 					}
 				}
@@ -265,8 +273,20 @@ public class Battleship extends Application {
 
 		Label label = new Label();
 		label.setText(message);
-		Button closeButton = new Button("close");
-		closeButton.setOnAction(e -> window.close());
+		String cl;
+		if(gameOver) {
+			cl = "Close Game";
+		}
+		else {
+			cl = "Close Window";
+		}
+		Button closeButton = new Button(cl);
+		closeButton.setOnAction(e -> {
+			window.close();
+			if(gameOver) {
+				primaryStage.close();
+			}
+		});
 
 		VBox lay = new VBox(10);
 		lay.getChildren().addAll(label, closeButton);
