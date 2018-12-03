@@ -99,7 +99,7 @@ public class Battleship extends Application {
 								button.setStyle("-fx-background-color: #FFFFFF");
 							}
 							if(aiGrid.allShipsSunk()) {//checks if the player won
-								gameOver = true;
+								gameOver = true;//so that the game ends
 								display("Victory", "You sank all their ships");
 
 							}
