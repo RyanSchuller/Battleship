@@ -85,7 +85,7 @@ public class Battleship extends Application {
 			 */
 			@Override
 			public void handle(MouseEvent event) {
-				if(placedShips) {//*if all ships are placed
+				if(placedShips) {//*if all ships are placed.
 					MouseButton btn = event.getButton();//gets what type of click it was.
 					if(btn==MouseButton.PRIMARY){
 						if(button.getStyle() == "-fx-background-color: #FFFFFF" || button.getStyle() == "-fx-background-color: #FF0000") {
