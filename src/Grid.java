@@ -541,7 +541,7 @@ public class Grid {
 		return true;		//otherwise it is empty (there's no ship at the location)
 	}
 
-	/**
+	/** 
 	 * Checks to see what the next ship to place should be and returns it.
 	 * 
 	 * @return The next ship that should be placed.
