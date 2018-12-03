@@ -103,65 +103,71 @@ public class Battleship extends Application {
 								display("Victory", "You sank all their ships");
 
 							}
-							numPlayerAtt++;
+							numPlayerAtt++;//adds to number of times player has attacked;
 						}
-						if(numPlayerAtt > numAiAtt) {
-							if(playerGrid.aiAttack()) {
+						if(numPlayerAtt > numAiAtt) {//if the AI has attacked less times
+							if(playerGrid.aiAttack()) {//if AI hits
 								grid2[playerGrid.getLastHitY()][playerGrid.getLastHitX()].setStyle("-fx-background-color: #FF0000");
 							}
-							else {
+							else {//if Ai misses
 								grid2[playerGrid.getLastHitY()][playerGrid.getLastHitX()].setStyle("-fx-background-color: #FFFFFF");
 							}
 
-							if(playerGrid.allShipsSunk()) {
-								gameOver = true;
-								display("Defeat", "Do you want to play again?");
+							if(playerGrid.allShipsSunk()) {//if all the players ships are trunk.
+								gameOver = true;//sets game to be over
+								display("Defeat", "All your ships were sunk.");
 
 							}	
-							numAiAtt++;
+							numAiAtt++;//adds to number of times the AI attacked.
 						}
 					}
 				}
-				else {
+				else {//tells the user to place ships before attacking.
 					display("noShips","Place ships first");
 				}
 			}
 		});
-		return button ;
+		return button ;//returns the button.
 	}
-
+	/**
+	 * Button on the grid for placing ships
+	 * @param text buttons name
+	 * @param x x coordinate
+	 * @param y y coordinate
+	 * @return a button that can place ships and once all the ships are placed it does nothing.
+	 */
 	private Button createPlaceButton(String text, int x, int y) {
-		Button button = new Button("");
+		Button button = new Button("");//new butto
 		button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		button.setStyle("-fx-background-color: #0080ff");
-		button.setOnMouseClicked(new EventHandler<MouseEvent>() {
+		button.setStyle("-fx-background-color: #0080ff");//changes color of the button.
+		button.setOnMouseClicked(new EventHandler<MouseEvent>() {//on click
 
 			@Override
 			public void handle(MouseEvent event) {
-				Ship nS = playerGrid.nextShip();
-				MouseButton btn = event.getButton();
-				if(btn==MouseButton.PRIMARY){
-					if(!nS.isPlaced() && !nS.isLast()) {
-						try {
-							playerGrid.placeShip(nS, x, y, false);
-							nS.placed();
-							for(int i = 0; i < nS.getLength(); i++) {
+				Ship nS = playerGrid.nextShip();//gets the next ship to be placed
+				MouseButton btn = event.getButton();//button clicked
+				if(btn==MouseButton.PRIMARY){//if left click
+					if(!nS.isPlaced() && !nS.isLast()) {//makes sure its not placed and not the last ship which is nullship.
+						try {//places
+							playerGrid.placeShip(nS, x, y, false);//places the ship at x, y, and vertical is false, so horizontal.
+							nS.placed();//tells the ship class that the ship is placed.
+							for(int i = 0; i < nS.getLength(); i++) {//sets the grid for each tile the ship takes up.
 								grid2[x+i][y].setStyle("-fx-background-color: #A9A9A9");
 							}
 
 						}
-						catch(Exception e) {
-							display("Error", e.getMessage());
+						catch(Exception e) {//catches exception thrown if they place either out of bounds or overlapping.
+							display("Error", e.getMessage());//tells the user why the issue happened.
 						}
 
 					}
-					Ship cS = playerGrid.nextShip();
-					if(cS.isLast()) {
+					Ship cS = playerGrid.nextShip();//makes a copy of the ship.
+					if(cS.isLast()) {//checks if its the last.
 						display("All Placed", "All ships have been placed");
-						placedShips = true;
-						for(int i = 0; i < 10; i++) {
+						placedShips = true;//if last, tells the player and sets placeShips to be true, so that they can attack
+						for(int i = 0; i < 10; i++) {//makes all the buttons do nothing once ships are placed.
 							for(int j = 0; j < 10; j++) {
-								grid2[i][j].setOnMouseClicked(e -> System.out.print(""));
+								grid2[i][j].setOnMouseClicked(e -> {});//buttons now do nothing.
 							}
 						}
 					}
