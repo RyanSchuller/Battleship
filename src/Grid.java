@@ -233,7 +233,7 @@ public class Grid {
 			return hit;
 	}
 		
-	/**
+	/** 
 	 * Attacks the player's grid using random and logic based attacks.
 	 * 
 	 * @return If the attack was successful or not.
