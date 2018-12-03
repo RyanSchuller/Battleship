@@ -155,7 +155,7 @@ public class Battleship extends Application {
 						placedShips = true;
 						for(int i = 0; i < 10; i++) {
 							for(int j = 0; j < 10; j++) {
-								grid2[i][j].setOnMouseClicked(e -> System.out.print("pie"));
+								grid2[i][j].setOnMouseClicked(e -> System.out.print(""));
 							}
 						}
 					}
