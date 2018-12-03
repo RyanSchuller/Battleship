@@ -232,8 +232,8 @@ public class Grid {
 			hitAlready[y][x] = true;
 			return hit;
 	}
-	
-	/**
+		
+	/** 
 	 * Attacks the player's grid using random and logic based attacks.
 	 * 
 	 * @return If the attack was successful or not.
