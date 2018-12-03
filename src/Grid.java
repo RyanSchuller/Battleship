@@ -422,7 +422,7 @@ public class Grid {
 							hitAlready[y+1][x] = true;
 							if(hit) {
 								int[] coordinates = {y+1,x};
-								hitCoord.add(coordinates);
+								hitCoord.add(coordinates); 
 							}
 							attacked = true;
 						}
