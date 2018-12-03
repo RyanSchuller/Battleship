@@ -152,6 +152,7 @@ public class Battleship extends Application {
 					}
 					Ship cS = playerGrid.nextShip();
 					if(cS.isLast()) {
+						display("All Placed", "All ships have been placed");
 						placedShips = true;
 						for(int i = 0; i < 10; i++) {
 							for(int j = 0; j < 10; j++) {
@@ -163,7 +164,6 @@ public class Battleship extends Application {
 				else if(btn == MouseButton.SECONDARY){
 					if(!nS.isPlaced() && !nS.isLast()) {
 						try{
-							System.out.println("placing vert at: " + nS + " " + x + " " + y);
 							playerGrid.placeShip(nS, x, y, true);
 							placed = true;
 							nS.Placed();
