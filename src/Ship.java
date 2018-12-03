@@ -86,7 +86,7 @@ public class Ship {
 	 * a ship has been placed before moving on to the next ship
 	 * @author BoerJR
 	 */
-	public void Placed() {
+	public void placed() {
 		placed = true;
 	}
 	

@@ -1,4 +1,3 @@
-import javax.script.Bindings;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -131,15 +130,13 @@ public class Battleship extends Application {
 
 			@Override
 			public void handle(MouseEvent event) {
-				boolean placed = false;
 				Ship nS = playerGrid.nextShip();
 				MouseButton btn = event.getButton();
 				if(btn==MouseButton.PRIMARY){
 					if(!nS.isPlaced() && !nS.isLast()) {
 						try {
 							playerGrid.placeShip(nS, x, y, false);
-							placed = true;
-							nS.Placed();
+							nS.placed();
 							for(int i = 0; i < nS.getLength(); i++) {
 								grid2[x+i][y].setStyle("-fx-background-color: #A9A9A9");
 							}
@@ -165,8 +162,7 @@ public class Battleship extends Application {
 					if(!nS.isPlaced() && !nS.isLast()) {
 						try{
 							playerGrid.placeShip(nS, x, y, true);
-							placed = true;
-							nS.Placed();
+							nS.placed();
 							for(int i = 0; i < nS.getLength(); i++) {
 								grid2[x][y+i].setStyle("-fx-background-color: #A9A9A9");
 							}
