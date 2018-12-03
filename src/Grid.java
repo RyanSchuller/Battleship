@@ -346,13 +346,13 @@ public class Grid {
 					if(hitCoord.get(0)[1]<hitCoord.get(1)[1]) {
 						
 						//only for horizontal guessing
-						if(x+1<10 && !hitAlready[y][x+1]) {	//checks right the most recent hit
+						if(x+1<10 && !hitAlready[y][x+1]) {	//checks right of the most recent hit
 							hit = attack(y,x+1);
 							lastHitX = y;
 							lastHitY = x+1;
 							hitAlready[y][x+1] = true;
 							if(hit) {
-								int[] coordinates = {y,x-1};
+								int[] coordinates = {y,x+1};
 								hitCoord.add(coordinates);
 							}
 							attacked = true;
@@ -480,7 +480,7 @@ public class Grid {
 							}
 							attacked = true;
 						}	
-						else {
+						else { 
 							hitCoord= new ArrayList<int[]>();
 						}
 					}
