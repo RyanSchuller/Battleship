@@ -4,11 +4,7 @@ import java.util.Random;
 
 /**
  * This class represents the grids that the player sees and interacts with while playing the game.
-=======
-/** 
- * This class represents the multiple grids that the player sees and interacts with while playing the game.
->>>>>>> branch 'master' of https://github.com/RyanSchuller/Battleship.git
- */
+*/
 public class Grid {
 	
 	// Creating a final int SIDE_LENGTH as 10 to be used when initializing the arrays. 
@@ -48,7 +44,7 @@ public class Grid {
 		
 		// Initializing the two boolean 2D arrays.
 		spaces = new boolean[SIDE_LENGTH][SIDE_LENGTH];
-		hitAlready = new boolean[SIDE_LENGTH][SIDE_LENGTH];
+		hitAlready = new boolean[SIDE_LENGTH][SIDE_LENGTH]; 
 		
 		// Initializing the ship objects.
 		destroyer = new Ship(2);
@@ -507,7 +503,7 @@ public class Grid {
 	}
 
 	/**
-	 * 
+	 * Checks to see what the next ship to place should be and returns it.
 	 * 
 	 * @return The next ship that should be placed.
 	 * @author BoerJR
