@@ -42,8 +42,8 @@ public class Battleship extends Application {
 		g2 = getP2();
 
 
-		Label l = new Label("\n");
-
+		Label l = new Label("Left click to place Horizontally to the Right, Right click \n to place vertically down \n places ships in order from largest to smallest.");
+		l.setTextFill(Color.WHITE);
 		Label atB = new Label("Attack Board");
 		atB.setTextFill(Color.WHITE);
 		Label ownB = new Label("Your Own Board");
@@ -247,7 +247,7 @@ public class Battleship extends Application {
 	}
 
 	public static void main(String[] args) {
-		launch(args);
+		launch(args.clone());
 
 	}
 	public void closeProgram() {
