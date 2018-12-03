@@ -10,7 +10,7 @@ public class Ship {
 	private int y; //y-coordinate of the ship's leading point
 	private int length; //the length (number of squares occupied) of the ship
 	private boolean isVertical; //Whether or not the ship is vertical
-	private boolean placed; //Whether or not the ship has been placed on the board
+	private boolean isPlaced; //Whether or not the ship has been placed on the board
 
 	/**
 	 * this constructor makes a ship object with parameters to determine the size
@@ -87,7 +87,7 @@ public class Ship {
 	 * @author BoerJR
 	 */
 	public void placed() {
-		placed = true;
+		isPlaced = true;
 	}
 	
 	/**
@@ -96,7 +96,7 @@ public class Ship {
 	 * @author BoerJR
 	 */
 	public boolean isPlaced() {
-		return placed;
+		return isPlaced;
 	}
 	
 	/**
