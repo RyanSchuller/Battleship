@@ -543,28 +543,29 @@ public class Grid {
 
 	/** 
 	 * Checks to see what the next ship to place should be and returns it.
+	 * in Order
 	 * 
 	 * @return The next ship that should be placed.
 	 * @author BoerJR
 	 */
 	public Ship nextShip(){
-		if(!carrier.isPlaced()) {
+		if(!carrier.isPlaced()) {//returns the carrier if thats next.
 			return carrier;
 		}
-		else if(!battleship.isPlaced()) {
+		else if(!battleship.isPlaced()) {//returns battleship if thats next.
 			return battleship;
 		}
-		else if(!cruiser.isPlaced()) {
+		else if(!cruiser.isPlaced()) {//returns cruiser if thats next
 			return cruiser;
 		}
-		else if(!submarine.isPlaced()) {
+		else if(!submarine.isPlaced()) {//returns submarine if thats next
 			return submarine;
 		}
-		else if(!destroyer.isPlaced()) {
+		else if(!destroyer.isPlaced()) {//returns destroyer if thats next
 			return destroyer;
 		}
 		else {
-			return nullship;
+			return nullship;//returns nullship, so that it can know its out of ships to be placed.
 		}
 			
 	}
