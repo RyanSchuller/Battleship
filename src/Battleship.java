@@ -177,8 +177,8 @@ public class Battleship extends Application {
 				else if(btn == MouseButton.SECONDARY){//if right click
 					if(!nS.isPlaced() && !nS.isLast()) {//makes sure its not placed or nullship
 						try{
-							playerGrid.placeShip(nS, x, y, true);//
-							nS.placed();
+							playerGrid.placeShip(nS, x, y, true);//places ship at x, y, vertical is true.
+							nS.placed();//places the ship.
 							for(int i = 0; i < nS.getLength(); i++) {
 								grid2[x][y+i].setStyle("-fx-background-color: #A9A9A9");
 							}
