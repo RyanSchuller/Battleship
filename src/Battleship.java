@@ -26,6 +26,7 @@ public class Battleship extends Application {
 	private static boolean gameOver = false;
 	private int numPlayerAtt;
 	private int numAiAtt;
+	private Label l;
 
 	/**
 	 * sets up the GUI
@@ -47,7 +48,7 @@ public class Battleship extends Application {
 		g2 = getP2();
 
 
-		Label l = new Label("Left click to place Horizontally to the Right, Right click \n to place vertically down \n places ships in order from largest to smallest.");
+		l = new Label("Left click to place Horizontally to the Right, Right click \n to place vertically down \n places ships in order from largest to smallest.");
 		l.setTextFill(Color.WHITE);//creates text for the GUI
 		Label atB = new Label("Attack Board");
 		atB.setTextFill(Color.WHITE);
@@ -164,6 +165,7 @@ public class Battleship extends Application {
 					Ship cS = playerGrid.nextShip();//makes a copy of the ship.
 					if(cS.isLast()) {//checks if its the last.
 						display("All Placed", "All ships have been placed");
+						l.setTextFill(Color.NAVY);//makes the label dissapear
 						placedShips = true;//if last, tells the player and sets placeShips to be true, so that they can attack
 						for(int i = 0; i < 10; i++) {//makes all the buttons do nothing once ships are placed.
 							for(int j = 0; j < 10; j++) {
@@ -172,10 +174,10 @@ public class Battleship extends Application {
 						}
 					}
 				}
-				else if(btn == MouseButton.SECONDARY){
-					if(!nS.isPlaced() && !nS.isLast()) {
+				else if(btn == MouseButton.SECONDARY){//if right click
+					if(!nS.isPlaced() && !nS.isLast()) {//makes sure its not placed or nullship
 						try{
-							playerGrid.placeShip(nS, x, y, true);
+							playerGrid.placeShip(nS, x, y, true);//
 							nS.placed();
 							for(int i = 0; i < nS.getLength(); i++) {
 								grid2[x][y+i].setStyle("-fx-background-color: #A9A9A9");
