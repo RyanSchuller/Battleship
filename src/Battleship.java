@@ -16,20 +16,21 @@ import javafx.stage.Stage;
  * Top level class responsible for running the battleship game through the Game class..
  */
 public class Battleship extends Application {
-	private static Stage primaryStage;
-	private boolean answ;
-	private Grid playerGrid;
-	private Grid aiGrid;
-	public Button[][] grid1;
-	public Button[][] grid2;
-	private boolean placedShips = false;
-	private static boolean gameOver = false;
-	private int numPlayerAtt;
-	private int numAiAtt;
-	private Label l;
+	private static Stage primaryStage;//the stage that is displayed
+	private boolean answ;//for boxes that ask yes/no
+	private Grid playerGrid;//the grid of the spots containing players ships
+	private Grid aiGrid;//grid containing ai's ships
+	public Button[][] grid1;//top grid to attack
+	public Button[][] grid2;//grid to place ships
+	private boolean placedShips = false;//true if all ships are placed
+	private static boolean gameOver = false;//true if game is over
+	private int numPlayerAtt;//number of times player attacked
+	private int numAiAtt;//number of times AI attacked.
+	private Label l;//Label inbetween the two grids.
 
 	/**
 	 * sets up the GUI
+	 * @author BoerJR
 	 */
 	@Override
 	public void start(Stage ps) {
@@ -75,6 +76,7 @@ public class Battleship extends Application {
 	 * @param x x coordinate
 	 * @param y y coordinate
 	 * @return a button with inputs and attack functionality.
+	 * @author BoerJR
 	 */
 	private Button createButton(String text, int x, int y) {
 		Button button = new Button("");//creates the button
@@ -84,6 +86,7 @@ public class Battleship extends Application {
 
 			/**
 			 * sets what the buttons do, which is attack.
+			 * @author BoerJR
 			 */
 			@Override
 			public void handle(MouseEvent event) {
@@ -137,13 +140,18 @@ public class Battleship extends Application {
 	 * @param x x coordinate
 	 * @param y y coordinate
 	 * @return a button that can place ships and once all the ships are placed it does nothing.
+	 * @author BoerJR
 	 */
 	private Button createPlaceButton(String text, int x, int y) {
-		Button button = new Button("");//new butto
+		Button button = new Button("");//new button
 		button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		button.setStyle("-fx-background-color: #0080ff");//changes color of the button.
 		button.setOnMouseClicked(new EventHandler<MouseEvent>() {//on click
-
+			
+			/**
+			 * handles the mouse responses for Placing ships
+			 * @author BoerJR
+			 */
 			@Override
 			public void handle(MouseEvent event) {
 				Ship nS = playerGrid.nextShip();//gets the next ship to be placed
@@ -208,6 +216,11 @@ public class Battleship extends Application {
 		});
 		return button ;//returns these buttons.
 	}
+	/**
+	 * 
+	 * @return a Grid that the player can attack.
+	 * @author BoerJR
+	 */
 	public GridPane getP1() {//makes the pane for attacking.
 		GridPane grid = new GridPane();
 		int numRows = 10;//for size of Gridpane
@@ -238,6 +251,7 @@ public class Battleship extends Application {
 	/**
 	 * 
 	 * @return A Grid where you can place ships and see AI attacks.
+	 * @author BoerJR
 	 */
 	public GridPane getP2() {//gets ship placing grid.
 		GridPane grid = new GridPane();
@@ -270,6 +284,7 @@ public class Battleship extends Application {
 	/**
 	 * launches start.
 	 * @param args
+	 * @author BoerJR
 	 */
 	public static void main(String[] args) {
 		launch(args.clone());
@@ -277,6 +292,7 @@ public class Battleship extends Application {
 	}
 	/**
 	 * handles close requests, so it confirms they wanted to close.
+	 * @author BoerJR
 	 */
 	public void closeProgram() {
 		Boolean an = ConfirmBox("Close?", "Yes to close, No to keep it open");
@@ -288,6 +304,7 @@ public class Battleship extends Application {
 	 * displays a message
 	 * @param title of message
 	 * @param message displays in the middle of the box.
+	 * @author BoerJR
 	 */
 	public static void display(String title, String message) {
 		Stage window = new Stage();
@@ -328,6 +345,7 @@ public class Battleship extends Application {
 	 * @param title title
 	 * @param message what is being asked
 	 * @return true if they hit yes, false if no
+	 * @author BoerJR
 	 */
 	public boolean ConfirmBox(String title, String message) {
 		Stage window = new Stage();//new stage
