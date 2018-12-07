@@ -47,8 +47,6 @@ public class Battleship extends Application {
 		g1 = getP1();//sets the gridpanes using their respective methods.
 		GridPane g2 = new GridPane();
 		g2 = getP2();
-		
-		display("Order", "Places Carrier, Battleship, Cruiser, Submarine, then the Destroyer.");
 
 		l = new Label("Left click to place Horizontally to the Right, Right click \n to place vertically down \n places ships in order from largest to smallest.");
 		l.setTextFill(Color.WHITE);//creates text for the GUI
@@ -64,6 +62,7 @@ public class Battleship extends Application {
 		Scene scene = new Scene(v);//sets the vbox to the scene.
 		primaryStage.setScene(scene);//sets the scene to the stage.
 		primaryStage.show();//displays the stage.
+		display("Order", "Places Carrier, Battleship, Cruiser, Submarine, then the Destroyer.");
 		primaryStage.setOnCloseRequest(e -> {//this intercepts close program requests to ask the user if they are sure.
 			e.consume();//this line is to point out the fact that it is called consume.
 			closeProgram();//runs closeProgram method
